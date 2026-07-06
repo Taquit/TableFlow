@@ -1,0 +1,21 @@
+# Dependencias (Frontend y Backend)
+# =========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# =========================================
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build artifacts
+/dist
+/build
+
+.vscode/
+/MD_files
