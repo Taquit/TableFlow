@@ -18,7 +18,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      DATABASE_URL:"postgresql://postgres:password@db:5432/pparty"
+      DATABASE_URL: "postgresql://postgres:password@db:5432/pparty"
     depends_on:
       - db
 

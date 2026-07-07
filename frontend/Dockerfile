@@ -1,21 +1,21 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
-# Copiar archivos de dependencias
-COPY package*.json ./
+# Instalar pnpm globalmente
+RUN npm install -g pnpm@11.10.0
 
-# Instalar dependencias
-RUN npm install
+# Copiar los archivos de definición de paquetes
+# Nota: pnpm usa pnpm-lock.yaml en lugar de package-lock.json
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 
-# Copiar el directorio de Prisma primero para generar el cliente
-COPY prisma ./prisma/
-RUN npx prisma generate
+# Instalar las dependencias usando pnpm
+RUN pnpm install
 
-# Copiar el resto del código fuente
+# Copiar el resto de tu código fuente
 COPY . .
 
-EXPOSE 4000
+EXPOSE 3000
 
-# Comando para arrancar la aplicación en desarrollo
-CMD ["npm", "run", "dev"]
+# Ejecutar en modo desarrollo con pnpm
+CMD ["pnpm", "run", "dev", "--", "--host"]
