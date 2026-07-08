@@ -44,9 +44,15 @@ export const deletEventById = async (request, response) => {
 export const createEvent = async (request, response) => {
     try {
         const { name, date, time, location } = request.body;
-        const event = await prisma.event.create({ data: { name, date, time, location } });
+        const dateTimeString = time ? `${date}T${time}:00` : `${date}T00:00:00`;
+        const eventDate = new Date(dateTimeString);
+
+        const event = await prisma.event.create({ 
+            data: { eventName: name, date: eventDate, location } 
+        });
         response.json({ success: true, event });
     } catch (error) {
+        console.error(error);
         response.status(500).json({ success: false, error: 'Error creating event from database' });
     }
 };
@@ -56,13 +62,20 @@ export const updateEvent = async (request, response) => {
     try {
         const { id } = request.params;
         const { name, date, time, location } = request.body;
-        const event = await prisma.event.update({ where: { id: parseInt(id) }, data: { name, date, time, location } });
+        const dateTimeString = time ? `${date}T${time}:00` : `${date}T00:00:00`;
+        const eventDate = new Date(dateTimeString);
+
+        const event = await prisma.event.update({ 
+            where: { id: parseInt(id) }, 
+            data: { eventName: name, date: eventDate, location } 
+        });
         if (!event) {
             response.status(404).json({ success: false, error: 'Event not found' });
             return;
         }
         response.json({ success: true, event });
     } catch (error) {
+        console.error(error);
         response.status(500).json({ success: false, error: 'Error updating event from database' });
     }
 };

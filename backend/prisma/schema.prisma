@@ -19,6 +19,7 @@ model Event {
   updatedAt DateTime @updatedAt
   numTable  Int      @default(0)
   numGuest  Int      @default(0)
+  location  String?
 
   tables Table[]
   guests Guest[]

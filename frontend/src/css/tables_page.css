@@ -1,0 +1,37 @@
+.tables-page-card {
+    padding: 40px;
+    width: 100%;
+}
+
+.tables-page-card-loading {
+    max-width: 400px;
+}
+
+.tables-page-card-error {
+    max-width: 400px;
+    border-color: rgba(255, 99, 132, 0.3);
+}
+
+.tables-page-card-empty {
+    max-width: 450px;
+}
+
+.tables-page-card-title {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.tables-page-card-title-error {
+    color: #ffb3b3;
+}
+
+.tables-page-card-desc {
+    color: rgb(0, 0, 0);
+    font-size: 0.95rem;
+    margin-top: 12px;
+}
+
+.tables-page-card-desc-empty {
+    line-height: 1.5;
+}
