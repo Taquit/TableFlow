@@ -72,3 +72,16 @@ export const updateTable = async (request, response) => {
         response.status(500).json({ error: 'Error updating table from database' });
     }
 };
+
+//get tables by event id
+export const getTablesByEventId = async (request, response) => {
+    try {
+        const { eventId } = request.params;
+        const tables = await prisma.table.findMany({
+            where: { eventId: eventId }
+        });
+        response.json({ success: true, tables });
+    } catch (error) {
+        response.status(500).json({ error: 'Error fetching tables from database' });
+    }
+};

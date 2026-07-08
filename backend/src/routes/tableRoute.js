@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { getAllTables, getTableById, deleteTableById, createTable, updateTable } from "../controllers/tableController.js";
+import { getAllTables, getTableById, deleteTableById, createTable, updateTable, getTablesByEventId } from "../controllers/tableController.js";
 
 
 const router = Router();
 
 router.get('/', getAllTables);
 router.get('/:id', getTableById);
+router.get('/event/:eventId', getTablesByEventId);
 router.delete('/:id', deleteTableById);
 router.post('/', createTable);
 router.put('/:id', updateTable);

@@ -1,15 +1,17 @@
+import { Link } from 'react-router-dom';
+
 function Navbar() {
     return (
         <nav className="navbar">
             <div className="container">
-                <a href="#" className="logo-container">
+                <Link to="/" className="logo-container">
                     <span className="logo-icon">TF</span>
                     <span className="logo-text">TableFlow</span>
-                </a>
+                </Link>
                 <ul className="nav-links">
-                    <li><a href="#tables">Mesas</a></li>
-                    <li><a href="#guests">Invitados</a></li>
-                    <li><a href="#payments">Pagos</a></li>
+                    <li><Link to="/">Inicio</Link></li>
+                    <li><Link to="/">Gestión Eventos</Link></li>
+                    <li><Link to="/tables">Gestión Mesas</Link></li>
                 </ul>
             </div>
         </nav>
