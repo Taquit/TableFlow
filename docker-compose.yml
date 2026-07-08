@@ -17,6 +17,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
     environment:
       DATABASE_URL: "postgresql://postgres:password@db:5432/pparty"
     depends_on:
@@ -31,6 +34,8 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    environment:
+      - CI=true
     depends_on:
       - backend
 

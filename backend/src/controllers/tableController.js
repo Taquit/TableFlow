@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../prisma.js';
 
 // Get all tables
 export const getAllTables = async (request, response) => {
@@ -35,7 +33,7 @@ export const getTableById = async (request, response) => {
 };
 
 //Delet table
-export const deletTableBYId = async (request, response) => {
+export const deleteTableById = async (request, response) => {
     try {
         const { id } = request.params;
         const table = await prisma.table.delete({

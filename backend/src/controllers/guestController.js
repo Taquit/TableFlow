@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../prisma.js';
 
 //Get all guests
 export const getAllGuests = async (request,response)=>{

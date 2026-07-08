@@ -26,7 +26,6 @@ function Tables() {
             <section id="tables" className="demo-section">
                 <div className="container">
                     <div className="section-header">
-                        <h2 className="section-title">Gestión de Mesas</h2>
                         <p className="section-desc">
                             Organiza y distribuye los lugares de tu evento. Haz clic en una mesa para seleccionarla.
                         </p>

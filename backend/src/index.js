@@ -1,17 +1,14 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import pg from 'pg';
+import prisma from './prisma.js';
+
+import eventRoutes from './routes/eventRout.js';
+import guestRoutes from './routes/guestRout.js';
+import tableRoutes from './routes/tableRoute.js';
 
 const app = express();
 const port = process.env.PORT || 4000;
-
-// Inicializar el adaptador de base de datos para PostgreSQL (Requerido en Prisma 7)
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter });
 
 // Middlewares
 app.use(cors());
@@ -42,10 +39,18 @@ app.get('/', (req, res) => {
   res.json({
     message: 'Welcome to TableFlow API!',
     endpoints: {
-      health: '/health'
+      health: '/health',
+      events: '/api/events',
+      guests: '/api/guests',
+      tables: '/api/tables'
     }
   });
 });
+
+// Rutas de la API
+app.use('/api/events', eventRoutes);
+app.use('/api/guests', guestRoutes);
+app.use('/api/tables', tableRoutes);
 
 // Levantar el servidor
 app.listen(port, () => {
