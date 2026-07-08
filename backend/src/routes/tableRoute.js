@@ -5,8 +5,8 @@ import { getAllTables, getTableById, deleteTableById, createTable, updateTable, 
 const router = Router();
 
 router.get('/', getAllTables);
-router.get('/:id', getTableById);
 router.get('/event/:eventId', getTablesByEventId);
+router.get('/:id', getTableById);
 router.delete('/:id', deleteTableById);
 router.post('/', createTable);
 router.put('/:id', updateTable);
