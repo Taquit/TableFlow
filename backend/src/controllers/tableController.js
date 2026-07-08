@@ -17,7 +17,7 @@ export const getTableById = async (request, response) => {
         const { id } = request.params;
 
         const table = await prisma.table.findUnique({
-            where: { id: id },
+            where: { id: parseInt(id) },
             include: { guests: true } // Opcionalmente puedes incluir a los invitados de esta mesa
         });
 
@@ -37,7 +37,7 @@ export const deleteTableById = async (request, response) => {
     try {
         const { id } = request.params;
         const table = await prisma.table.delete({
-            where: { id: id }
+            where: { id: parseInt(id) }
         });
         response.json({ success: true, table });
     } catch (error) {
@@ -48,9 +48,9 @@ export const deleteTableById = async (request, response) => {
 //create table
 export const createTable = async (request, response) => {
     try {
-        const { number, capacity } = request.body;
+        const { number, numSeats, eventId } = request.body;
         const table = await prisma.table.create({
-            data: { number, capacity }
+            data: { number, numSeats, eventId: parseInt(eventId) }
         });
         response.json({ success: true, table });
     } catch (error) {
@@ -62,10 +62,10 @@ export const createTable = async (request, response) => {
 export const updateTable = async (request, response) => {
     try {
         const { id } = request.params;
-        const { number, capacity } = request.body;
+        const { number, numSeats } = request.body;
         const table = await prisma.table.update({
-            where: { id: id },
-            data: { number, capacity }
+            where: { id: parseInt(id) },
+            data: { number, numSeats }
         });
         response.json({ success: true, table });
     } catch (error) {
@@ -78,7 +78,7 @@ export const getTablesByEventId = async (request, response) => {
     try {
         const { eventId } = request.params;
         const tables = await prisma.table.findMany({
-            where: { eventId: eventId }
+            where: { eventId: parseInt(eventId) }
         });
         response.json({ success: true, tables });
     } catch (error) {

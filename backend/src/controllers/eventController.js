@@ -14,7 +14,7 @@ export const getAllEvents = async (request, response) => {
 export const getEventById = async (request, response) => {
     try {
         const { id } = request.params;
-        const event = await prisma.event.findUnique({ where: { id: id } });
+        const event = await prisma.event.findUnique({ where: { id: parseInt(id) } });
         if (!event) {
             response.status(404).json({ success: false, error: 'Event not found' });
             return;
@@ -29,7 +29,7 @@ export const getEventById = async (request, response) => {
 export const deletEventById = async (request, response) => {
     try {
         const { id } = request.params;
-        const event = await prisma.event.delete({ where: { id: id } });
+        const event = await prisma.event.delete({ where: { id: parseInt(id) } });
         if (!event) {
             response.status(404).json({ success: false, error: 'Event not found' });
             return;
@@ -56,7 +56,7 @@ export const updateEvent = async (request, response) => {
     try {
         const { id } = request.params;
         const { name, date, time, location } = request.body;
-        const event = await prisma.event.update({ where: { id: id }, data: { name, date, time, location } });
+        const event = await prisma.event.update({ where: { id: parseInt(id) }, data: { name, date, time, location } });
         if (!event) {
             response.status(404).json({ success: false, error: 'Event not found' });
             return;

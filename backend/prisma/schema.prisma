@@ -12,40 +12,42 @@ datasource db {
 }
 
 model Event {
-  id          String   @id @default(uuid())
-  eventName   String
-  date        DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  eventName String
+  date      DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  numTable  Int      @default(0)
+  numGuest  Int      @default(0)
 
   tables Table[]
   guests Guest[]
 }
 
-model Table{
-  id          String   @id @default(uuid())
-  number      Int
+model Table {
+  id       Int @id @default(autoincrement())
+  number   Int
+  numSeats Int @default(8)
 
-  eventId String
-  event   Event    @relation(fields: [eventId], references: [id], onDelete:Cascade)
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   guests Guest[]
+
   @@unique([eventId, number])
 }
 
 model Guest {
-  id         String   @id @default(uuid())
-  name       String
-  email      String?
-  
-  // Finanzas del invitado
-  paid       Boolean  @default(false)  // ¿Ya pagó?
-  amountPaid Float    @default(0.0)    // Cantidad aportada
-  // Relación con el Evento (obligatoria)
-  eventId    String
-  event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  
-  // Relación con la Mesa (opcional: un invitado puede no tener mesa asignada aún)
-  tableId    String?
-  table      Table?   @relation(fields: [tableId], references: [id], onDelete: SetNull)
+  id    Int     @id @default(autoincrement())
+  name  String
+  email String?
+
+  paid       Boolean @default(false)
+  amountPaid Float   @default(0.0)
+
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  tableId Int?
+  table   Table? @relation(fields: [tableId], references: [id], onDelete: SetNull)
 }

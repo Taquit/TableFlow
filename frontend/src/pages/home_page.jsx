@@ -10,7 +10,7 @@ export default function HomePage() {
         <button className='btn-primary' onClick={() => navigate('/tables')}>
           Gestion de mesas
         </button>
-        <button className='btn-primary'>
+        <button className='btn-primary' onClick={() => navigate('/event')}>
           Gestion de eventos
         </button>
       </section>

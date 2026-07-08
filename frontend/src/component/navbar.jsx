@@ -10,7 +10,7 @@ function Navbar() {
                 </Link>
                 <ul className="nav-links">
                     <li><Link to="/">Inicio</Link></li>
-                    <li><Link to="/">Gestión Eventos</Link></li>
+                    <li><Link to="/event">Gestión Eventos</Link></li>
                     <li><Link to="/tables">Gestión Mesas</Link></li>
                 </ul>
             </div>
