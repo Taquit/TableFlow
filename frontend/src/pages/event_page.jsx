@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import CreateEvent from '../component/createEvent';
+import EditEvent from '../component/editEvent';
 
 export function EventPage() {
     const [action, setAction] = useState(null); // 'create' or 'edit'
@@ -29,12 +30,8 @@ export function EventPage() {
             {/* Renderizar componente de Crear Evento si action es 'create' */}
             {action === 'create' && <CreateEvent />}
             
-            {/* Aquí iría la lógica o componente de edición si action === 'edit' */}
-            {action === 'edit' && (
-                <div className="demo-card glass-effect" style={{ padding: '40px' }}>
-                    <p>Funcionalidad de editar evento en desarrollo...</p>
-                </div>
-            )}
+            {/* Renderizar componente de Editar Evento si action es 'edit' */}
+            {action === 'edit' && <EditEvent />}
         </div>
     )
 }

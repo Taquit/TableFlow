@@ -31,5 +31,63 @@ export function useEvent(){
     },[])
     
 
-    return { events, loading, error };
+    const createNewEvent = async (eventData) => {
+        try {
+            const response = await fetch(`${API_URL}/events`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(eventData)
+            });
+            const data = await response.json();
+            if (data.success) {
+                // Actualizar la lista de eventos localmente
+                setEvents(prev => [...prev, data.event]);
+                return { success: true, event: data.event };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (err) {
+            return { success: false, error: 'Error de red al conectar con el servidor.' };
+        }
+    };
+
+    const updateExistingEvent = async (id, eventData) => {
+        try {
+            const response = await fetch(`${API_URL}/events/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(eventData)
+            });
+            const data = await response.json();
+            if (data.success) {
+                // Actualizar la lista localmente
+                setEvents(prev => prev.map(ev => ev.id === parseInt(id) ? data.event : ev));
+                return { success: true, event: data.event };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (err) {
+            return { success: false, error: 'Error de red al conectar con el servidor.' };
+        }
+    };
+
+    const deleteExistingEvent = async (id) => {
+        try {
+            const response = await fetch(`${API_URL}/events/${id}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            if (data.success) {
+                // Remove from local list
+                setEvents(prev => prev.filter(ev => ev.id !== parseInt(id)));
+                return { success: true };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (err) {
+            return { success: false, error: 'Error de red al conectar con el servidor.' };
+        }
+    };
+
+    return { events, loading, error, createNewEvent, updateExistingEvent, deleteExistingEvent };
 }

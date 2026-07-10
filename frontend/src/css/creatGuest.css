@@ -1,0 +1,125 @@
+.creat-guest-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.creat-guest-modal {
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(181, 25, 206, 0.3);
+    border-radius: 24px;
+    padding: 30px 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(181, 25, 206, 0.1);
+    color: white;
+}
+
+.creat-guest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.creat-guest-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffffff 0%, #b519ce 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.creat-guest-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.creat-guest-close:hover {
+    color: white;
+}
+
+.creat-guest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.creat-guest-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.creat-guest-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.creat-guest-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.creat-guest-input:focus {
+    outline: none;
+    border-color: #b519ce;
+    box-shadow: 0 0 10px rgba(181, 25, 206, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.creat-guest-checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.creat-guest-submit {
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    background: linear-gradient(135deg, #b519ce 0%, #8e14a1 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(181, 25, 206, 0.4);
+}
+
+.creat-guest-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(181, 25, 206, 0.6);
+}
+
+.creat-guest-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

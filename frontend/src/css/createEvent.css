@@ -1,0 +1,132 @@
+.create-event-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.create-event-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+}
+
+.create-event-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.create-event-title {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #b519ce 0%, #a0a0a0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 4px 20px rgba(255, 255, 255, 0.2);
+}
+
+.create-event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.create-event-row {
+    display: flex;
+    gap: 15px;
+}
+
+.create-event-group {
+    text-align: left;
+    flex: 1;
+}
+
+.create-event-submit-btn {
+    margin-top: 20px;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.create-event-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+}
+
+.create-event-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.create-event-status-message {
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.create-event-status-error {
+    background-color: rgba(255, 99, 132, 0.2);
+    color: #ffb3b3;
+    border: 1px solid rgba(255, 99, 132, 0.3);
+}
+
+.create-event-status-success {
+    background-color: rgba(75, 192, 192, 0.2);
+    color: #b3ffb3;
+    border: 1px solid rgba(75, 192, 192, 0.3);
+}
+.create-event-delete-btn {
+    margin-top: 20px;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    flex: 1;
+}
+
+.create-event-delete-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.create-event-delete-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+}
+
+.button-group .create-event-submit-btn {
+    flex: 1;
+}

@@ -41,10 +41,19 @@ export const deleteGuestById = async (request, response) => {
 //Create guest
 export const createGuest = async (request, response) => {
     try {
-        const { name, email, phone, eventId, tableId } = request.body;
-        const guest = await prisma.guest.create({ data: { name, email, phone, eventId: parseInt(eventId), tableId: tableId ? parseInt(tableId) : null } });
+        const { name, email, eventId, tableId, paid, amountPaid } = request.body;
+        const guestData = { 
+            name, 
+            email, 
+            eventId: parseInt(eventId), 
+            tableId: tableId ? parseInt(tableId) : null,
+            paid: paid === true || paid === 'true',
+            amountPaid: amountPaid ? parseFloat(amountPaid) : 0.0
+        };
+        const guest = await prisma.guest.create({ data: guestData });
         response.json({ success: true, guest });
     } catch (error) {
+        console.error(error);
         response.status(500).json({ success: false, message: 'Error creating guest' });
     }
 }
@@ -53,10 +62,12 @@ export const createGuest = async (request, response) => {
 export const updateGuest = async (request, response) => {
     try {
         const { id } = request.params;
-        const { name, email, phone, eventId, tableId } = request.body;
-        const dataToUpdate = { name, email, phone };
-        if (eventId) dataToUpdate.eventId = parseInt(eventId);
-        if (tableId) dataToUpdate.tableId = parseInt(tableId);
+        const { name, email, eventId, tableId, paid, amountPaid } = request.body;
+        const dataToUpdate = { name, email };
+        if (eventId !== undefined) dataToUpdate.eventId = parseInt(eventId);
+        if (tableId !== undefined) dataToUpdate.tableId = tableId === null ? null : parseInt(tableId);
+        if (paid !== undefined) dataToUpdate.paid = paid === true || paid === 'true';
+        if (amountPaid !== undefined) dataToUpdate.amountPaid = parseFloat(amountPaid);
         const guest = await prisma.guest.update({ where: { id: parseInt(id) }, data: dataToUpdate });
         if (!guest) {
             return response.status(404).json({ success: false, message: 'Guest not found' });

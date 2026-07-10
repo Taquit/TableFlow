@@ -5,6 +5,7 @@ import { EditTable } from './editTable.jsx'
 function Tables({ eventId }) {
     const [selectedTableId, setSelectedTableId] = useState(null);
     const { tables, loading, error } = useTables(eventId);
+    const [selectedTableNumber, setSelectedTableNumber] = useState(null);
 
     if (loading) {
         return <p>Cargando mesas...</p>;
@@ -35,12 +36,12 @@ function Tables({ eventId }) {
                                     <div
                                         key={table.id}
                                         className={`table-widget ${selectedTableId === table.id ? 'active' : ''}`}
-                                        onClick={() => setSelectedTableId(table.id)}
+                                        onClick={() => { setSelectedTableId(table.id); setSelectedTableNumber(table.number) }}
                                     >
                                         <div className="table-circle">#{table.number}</div>
                                         <div className="table-cap">Mesa {table.number}</div>
                                         <div className="table-cap" style={{ fontSize: '10px', marginTop: '4px', opacity: 0.8 }}>
-                                            Cap: {table.capacity} pers.
+                                            Cap: {table.numSeats} pers.
                                         </div>
                                     </div>
                                 ))}
@@ -48,7 +49,7 @@ function Tables({ eventId }) {
                         </div>
                         {selectedTableId && (
                             <div style={{ width: '400px', flexShrink: 0, animation: 'fadeIn 0.3s ease' }}>
-                                <EditTable tableId={selectedTableId} eventId={eventId} />
+                                <EditTable tableId={selectedTableId} eventId={eventId} tableNumber={selectedTableNumber} />
                             </div>
                         )}
                     </div>

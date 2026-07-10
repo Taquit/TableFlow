@@ -1,19 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
 const API_URL = 'http://localhost:4000/api';
 
-export function useGuests(eventId, tableId) {
-
+export function useEventGuests(eventId) {
     const [guests, setGuests] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!eventId) return;
+        if (!eventId) {
+            setGuests([]);
+            return;
+        }
+        
         const fetchGuests = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`${API_URL}/guests/table/${tableId}/event/${eventId}`);
+                const response = await fetch(`${API_URL}/guests/event/${eventId}`);
                 if (!response.ok) {
                     throw new Error('Error fetching guests');
                 }
@@ -30,26 +33,7 @@ export function useGuests(eventId, tableId) {
             }
         };
         fetchGuests();
-    }, [eventId, tableId]);
-
-    const createGuestForTable = async (guestData) => {
-        try {
-            const response = await fetch(`${API_URL}/guests`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(guestData)
-            });
-            const data = await response.json();
-            if (data.success) {
-                setGuests(prev => [...prev, data.guest]);
-                return { success: true, guest: data.guest };
-            } else {
-                return { success: false, error: data.message || 'Error al crear invitado' };
-            }
-        } catch (err) {
-            return { success: false, error: 'Error de red al conectar con el servidor.' };
-        }
-    };
+    }, [eventId]);
 
     const updateGuestData = async (guestId, guestData) => {
         try {
@@ -87,5 +71,5 @@ export function useGuests(eventId, tableId) {
         }
     };
 
-    return { guests, loading, error, createGuestForTable, updateGuestData, removeGuest };
+    return { guests, loading, error, updateGuestData, removeGuest };
 }
