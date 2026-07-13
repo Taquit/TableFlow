@@ -13,6 +13,8 @@ function Navbar() {
                     <li><Link to="/event">Gestión Eventos</Link></li>
                     <li><Link to="/tables">Gestión Mesas</Link></li>
                     <li><Link to="/guests">Gestión Invitados</Link></li>
+                    <li><Link to="/accounting">Contaduría</Link></li>
+                    <li><Link to="/export">Exportar</Link></li>
                 </ul>
             </div>
         </nav>

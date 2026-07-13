@@ -34,5 +34,22 @@ export function useTables(eventId) {
         fetchTables();
     }, [eventId])
 
-    return { tables, loading, error };
+    const deleteTable = async (tableId) => {
+        try {
+            const response = await fetch(`${API_URL}/tables/${tableId}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            if (data.success) {
+                setTables(prev => prev.filter(t => t.id !== parseInt(tableId)));
+                return { success: true };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            return { success: false, error: 'Error de red al eliminar la mesa' };
+        }
+    };
+
+    return { tables, loading, error, deleteTable };
 }

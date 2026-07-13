@@ -5,7 +5,7 @@ import CreatGuest from './creatGuest';
 import EditGuestModal from './editGuest';
 import '../css/editTable.css';
 
-export const EditTable = ({ tableId, eventId, tableNumber }) => {
+export const EditTable = ({ tableId, eventId, tableNumber, onDeleteTable }) => {
     const { guests, loading, error, createGuestForTable, updateGuestData, removeGuest } = useGuests(eventId, tableId);
     const [selectedTableGuests, setSelectedTableGuests] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,6 +37,19 @@ export const EditTable = ({ tableId, eventId, tableNumber }) => {
                 >
                     + Añadir Invitado
                 </button>
+                {onDeleteTable && (
+                    <button
+                        className="edit-table-add-btn"
+                        style={{ background: '#ef4444', marginTop: '10px' }}
+                        onClick={async () => {
+                            if (window.confirm('¿Estás seguro de que deseas eliminar esta mesa? Los invitados asignados a ella no serán borrados, pero se quedarán sin mesa.')) {
+                                await onDeleteTable();
+                            }
+                        }}
+                    >
+                        🗑️ Eliminar Mesa
+                    </button>
+                )}
             </div>
 
             <div className="guests-list-container">
@@ -54,7 +67,7 @@ export const EditTable = ({ tableId, eventId, tableNumber }) => {
                     >
                         <span className="guest-name">{g.name}</span>
                         {/* Puedes descomentar u ocultar otros datos */}
-                        {/* <span>{g.email}</span> */}
+                        {/* <span>{g.phone}</span> */}
                     </div>
                 ))}
             </div>

@@ -63,7 +63,7 @@ function GuestsPage() {
                     <label>Buscar Invitado:</label>
                     <input
                         type="text"
-                        placeholder="Nombre o correo..."
+                        placeholder="Nombre o teléfono..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         disabled={!selectedEventId}
@@ -86,7 +86,7 @@ function GuestsPage() {
                                     title="Haz clic para editar"
                                 >
                                     <h3>{guest.name}</h3>
-                                    {guest.email && <p>✉️ {guest.email}</p>}
+                                    {guest.phone && <p>📞 {guest.phone}</p>}
                                     <p>🪑 Mesa: {guest.table ? `#${guest.table.number}` : 'Sin asignar'}</p>
 
                                     <div className={`guest-status-badge ${getPaymentStatus(guest).class}`}>

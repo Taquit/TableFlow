@@ -35,3 +35,76 @@
 .tables-page-card-desc-empty {
     line-height: 1.5;
 }
+
+/* Styles for tables.jsx */
+.tables-layout-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.tables-main-card {
+    flex: 1;
+    transition: max-width 0.3s ease;
+}
+
+.tables-main-card.selected {
+    max-width: 600px;
+}
+
+.tables-main-card.unselected {
+    max-width: 800px;
+}
+
+.tables-grid-4cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.tables-capacity-text {
+    font-size: 10px;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+.tables-sidebar {
+    width: 400px;
+    flex-shrink: 0;
+    animation: fadeIn 0.3s ease;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.pagination-btn {
+    padding: 8px 12px;
+    border: 1px solid var(--dark-border, #e5e7eb);
+    background-color: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #000;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.pagination-btn.active {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

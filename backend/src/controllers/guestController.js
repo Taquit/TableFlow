@@ -41,10 +41,10 @@ export const deleteGuestById = async (request, response) => {
 //Create guest
 export const createGuest = async (request, response) => {
     try {
-        const { name, email, eventId, tableId, paid, amountPaid } = request.body;
+        const { name, phone, eventId, tableId, paid, amountPaid } = request.body;
         const guestData = {
             name,
-            email,
+            phone,
             eventId: parseInt(eventId),
             tableId: tableId ? parseInt(tableId) : null,
             paid: paid === true || paid === 'true',
@@ -62,8 +62,8 @@ export const createGuest = async (request, response) => {
 export const updateGuest = async (request, response) => {
     try {
         const { id } = request.params;
-        const { name, email, eventId, tableId, paid, amountPaid } = request.body;
-        const dataToUpdate = { name, email };
+        const { name, phone, eventId, tableId, paid, amountPaid } = request.body;
+        const dataToUpdate = { name, phone };
         if (eventId !== undefined) dataToUpdate.eventId = parseInt(eventId);
         if (tableId !== undefined) dataToUpdate.tableId = tableId === null ? null : parseInt(tableId);
         if (paid !== undefined) dataToUpdate.paid = paid === true || paid === 'true';
@@ -106,7 +106,16 @@ export const getGuestsByTableIdAndEventId = async (request, response) => {
 export const getGuestByNameAndEventId = async (request, response) => {
     try {
         const { name, eventId } = request.params;
-        const guest = await prisma.guest.findMany({ where: { name: { contains: name }, eventId: parseInt(eventId) }, include: { table: true } });
+        const guest = await prisma.guest.findMany({
+            where: {
+                eventId: parseInt(eventId),
+                OR: [
+                    { name: { contains: name, mode: 'insensitive' } },
+                    { phone: { contains: name } }
+                ]
+            },
+            include: { table: true }
+        });
         response.json({ success: true, guest });
     } catch (error) {
         response.status(500).json({ success: false, message: 'Error fetching guest' });

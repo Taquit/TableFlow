@@ -1,0 +1,28 @@
+.excel-page-container {
+    min-height: 80vh;
+}
+
+.excel-subtitle {
+    color: rgba(0, 0, 0, 1);
+    margin-bottom: 30px;
+}
+
+.excel-section {
+    padding: 0;
+    max-width: 800px;
+    margin: 0 auto 2rem auto;
+}
+
+.excel-card {
+    margin-bottom: 0;
+}
+
+.loading-text {
+    color: white;
+}
+
+.export-action-group {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}

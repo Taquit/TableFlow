@@ -4,7 +4,7 @@ import '../css/creatGuest.css';
 
 export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [paid, setPaid] = useState(false);
     const [amountPaid, setAmountPaid] = useState('');
     const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
 
         const result = await onAddGuest({
             name,
-            email,
+            phone,
             eventId,
             tableId,
             paid,
@@ -55,13 +55,13 @@ export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
                     </div>
 
                     <div className="creat-guest-group">
-                        <label className="creat-guest-label">Email</label>
+                        <label className="creat-guest-label">Teléfono</label>
                         <input
-                            type="email"
+                            type="tel"
                             className="creat-guest-input"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Ej. juan@correo.com"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            placeholder="Ej. 123456789"
                         />
                     </div>
 

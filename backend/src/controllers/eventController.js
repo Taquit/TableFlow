@@ -103,6 +103,30 @@ export const updateEvent = async (request, response) => {
             where: { id: parseInt(id) }, 
             data: dataPayload 
         });
+
+        if (numTable !== undefined && numTable !== '') {
+            const newNumTable = parseInt(numTable);
+            const currentTables = await prisma.table.findMany({
+                where: { eventId: parseInt(id) },
+                orderBy: { number: 'asc' }
+            });
+            
+            if (newNumTable > currentTables.length) {
+                const tablesToCreate = [];
+                for (let i = currentTables.length + 1; i <= newNumTable; i++) {
+                    tablesToCreate.push({ number: i, numSeats: 8, eventId: parseInt(id) });
+                }
+                if (tablesToCreate.length > 0) {
+                    await prisma.table.createMany({ data: tablesToCreate });
+                }
+            } else if (newNumTable < currentTables.length) {
+                const tablesToDelete = currentTables.slice(newNumTable).map(t => t.id);
+                if (tablesToDelete.length > 0) {
+                    await prisma.table.deleteMany({ where: { id: { in: tablesToDelete } } });
+                }
+            }
+        }
+
         if (!event) {
             response.status(404).json({ success: false, error: 'Event not found' });
             return;
@@ -111,6 +135,57 @@ export const updateEvent = async (request, response) => {
     } catch (error) {
         console.error(error);
         response.status(500).json({ success: false, error: 'Error updating event from database' });
+    }
+};
+
+// Get event accounting data
+export const getEventAccounting = async (request, response) => {
+    try {
+        const { id } = request.params;
+        const event = await prisma.event.findUnique({
+            where: { id: parseInt(id) },
+            include: {
+                tables: {
+                    include: {
+                        guests: true
+                    },
+                    orderBy: { number: 'asc' }
+                },
+                guests: {
+                    where: { tableId: null }
+                }
+            }
+        });
+        
+        if (!event) {
+            response.status(404).json({ success: false, error: 'Event not found' });
+            return;
+        }
+
+        let totalCollected = 0;
+        const tablesData = event.tables.map(table => {
+            const tableCollected = table.guests.reduce((sum, guest) => sum + (guest.amountPaid || 0), 0);
+            totalCollected += tableCollected;
+            return {
+                id: table.id,
+                number: table.number,
+                collected: tableCollected,
+                guestsCount: table.guests.length
+            };
+        });
+        
+        const unassignedCollected = event.guests.reduce((sum, guest) => sum + (guest.amountPaid || 0), 0);
+        totalCollected += unassignedCollected;
+        
+        response.json({ 
+            success: true, 
+            totalCollected, 
+            tablesData, 
+            unassignedCollected 
+        });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ success: false, error: 'Error fetching accounting data' });
     }
 };
 

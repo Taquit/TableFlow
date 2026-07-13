@@ -4,7 +4,7 @@ import '../css/editGuest.css';
 
 const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
     const [name, setName] = useState(guest?.name || '');
-    const [email, setEmail] = useState(guest?.email || '');
+    const [phone, setPhone] = useState(guest?.phone || '');
     const [paid, setPaid] = useState(guest?.paid || false);
     const [amountPaid, setAmountPaid] = useState(guest?.amountPaid || 0);
     const [tableId, setTableId] = useState(guest?.tableId || '');
@@ -15,7 +15,7 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
     useEffect(() => {
         if (guest) {
             setName(guest.name || '');
-            setEmail(guest.email || '');
+            setPhone(guest.phone || '');
             setPaid(guest.paid || false);
             setAmountPaid(guest.amountPaid || 0);
             setTableId(guest.tableId || '');
@@ -50,7 +50,7 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
         
         const guestData = {
             name,
-            email,
+            phone,
             paid,
             amountPaid: parseFloat(amountPaid) || 0,
             tableId: tableId ? parseInt(tableId) : null
@@ -117,12 +117,12 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
                 </div>
 
                 <div className="edit-guest-form-group">
-                    <label>Email:</label>
+                    <label>Teléfono:</label>
                     <input 
-                        type="email" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)} 
-                        placeholder="correo@ejemplo.com"
+                        type="tel" 
+                        value={phone} 
+                        onChange={(e) => setPhone(e.target.value)} 
+                        placeholder="Ej. 123456789"
                     />
                 </div>
 

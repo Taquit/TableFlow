@@ -4,8 +4,10 @@ import { EditTable } from './editTable.jsx'
 
 function Tables({ eventId }) {
     const [selectedTableId, setSelectedTableId] = useState(null);
-    const { tables, loading, error } = useTables(eventId);
+    const { tables, loading, error, deleteTable } = useTables(eventId);
     const [selectedTableNumber, setSelectedTableNumber] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const tablesPerPage = 12;
 
     if (loading) {
         return <p>Cargando mesas...</p>;
@@ -16,6 +18,16 @@ function Tables({ eventId }) {
     if (tables.length === 0) {
         return <p>No hay mesas disponibles para este evento.</p>;
     }
+
+    const totalPages = Math.ceil(tables.length / tablesPerPage);
+    const indexOfLastTable = currentPage * tablesPerPage;
+    const indexOfFirstTable = indexOfLastTable - tablesPerPage;
+    const currentTables = tables.slice(indexOfFirstTable, indexOfLastTable);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     return (
         <>
             <section id="tables" className="demo-section">
@@ -25,14 +37,14 @@ function Tables({ eventId }) {
                             Organiza y distribuye los lugares de tu evento. Haz clic en una mesa para seleccionarla.
                         </p>
                     </div>
-                    <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', justifyContent: 'center' }}>
-                        <div className="demo-card glass-effect" style={{ flex: 1, maxWidth: selectedTableId ? '600px' : '800px', transition: 'max-width 0.3s ease' }}>
+                    <div className="tables-layout-container">
+                        <div className={`demo-card glass-effect tables-main-card ${selectedTableId ? 'selected' : 'unselected'}`}>
                             <div className="demo-dashboard-header">
                                 <h3>Plano de Distribución</h3>
                                 <div className="table-cap">Mostrando {tables.length} mesas disponibles</div>
                             </div>
-                            <div className="tables-container">
-                                {tables.map(table => (
+                            <div className="tables-grid-4cols">
+                                {currentTables.map(table => (
                                     <div
                                         key={table.id}
                                         className={`table-widget ${selectedTableId === table.id ? 'active' : ''}`}
@@ -40,16 +52,55 @@ function Tables({ eventId }) {
                                     >
                                         <div className="table-circle">#{table.number}</div>
                                         <div className="table-cap">Mesa {table.number}</div>
-                                        <div className="table-cap" style={{ fontSize: '10px', marginTop: '4px', opacity: 0.8 }}>
-                                            Cap: {table.numSeats} pers.
+                                        <div className="table-cap tables-capacity-text">
+                                            Cap: {table._count?.guests || 0} / {table.numSeats} pers.
                                         </div>
                                     </div>
                                 ))}
                             </div>
+                            {totalPages > 1 && (
+                                <div className="pagination-container">
+                                    <button 
+                                        className="pagination-btn" 
+                                        disabled={currentPage === 1}
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                    >
+                                        Anterior
+                                    </button>
+                                    {[...Array(totalPages)].map((_, index) => (
+                                        <button 
+                                            key={index + 1} 
+                                            className={`pagination-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                                            onClick={() => handlePageChange(index + 1)}
+                                        >
+                                            {index + 1}
+                                        </button>
+                                    ))}
+                                    <button 
+                                        className="pagination-btn" 
+                                        disabled={currentPage === totalPages}
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                    >
+                                        Siguiente
+                                    </button>
+                                </div>
+                            )}
                         </div>
                         {selectedTableId && (
-                            <div style={{ width: '400px', flexShrink: 0, animation: 'fadeIn 0.3s ease' }}>
-                                <EditTable tableId={selectedTableId} eventId={eventId} tableNumber={selectedTableNumber} />
+                            <div className="tables-sidebar">
+                                <EditTable 
+                                    tableId={selectedTableId} 
+                                    eventId={eventId} 
+                                    tableNumber={selectedTableNumber} 
+                                    onDeleteTable={async () => {
+                                        const res = await deleteTable(selectedTableId);
+                                        if (res.success) {
+                                            setSelectedTableId(null);
+                                            setSelectedTableNumber(null);
+                                        }
+                                        return res;
+                                    }}
+                                />
                             </div>
                         )}
                     </div>

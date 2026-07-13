@@ -6,6 +6,8 @@ import HomePage from './pages/home_page';
 import TablesPage from './pages/tables_page';
 import EventPage from './pages/event_page';
 import GuestsPage from './pages/guest_page';
+import MoneyPage from './pages/money_page';
+import ExcelPage from './pages/excel_page';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/tables" element={<TablesPage />} />
         <Route path="/event" element={<EventPage />} />
         <Route path="/guests" element={<GuestsPage />} />
+        <Route path="/accounting" element={<MoneyPage />} />
+        <Route path="/export" element={<ExcelPage />} />
       </Routes>
 
       <Footer />

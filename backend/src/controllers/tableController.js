@@ -78,7 +78,13 @@ export const getTablesByEventId = async (request, response) => {
     try {
         const { eventId } = request.params;
         const tables = await prisma.table.findMany({
-            where: { eventId: parseInt(eventId) }
+            where: { eventId: parseInt(eventId) },
+            include: {
+                _count: {
+                    select: { guests: true }
+                }
+            },
+            orderBy: { number: 'asc' }
         });
         response.json({ success: true, tables });
     } catch (error) {
