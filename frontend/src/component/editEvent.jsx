@@ -12,6 +12,7 @@ export function EditEvent() {
     const [location, setLocation] = useState('');
     const [numTable, setNumTable] = useState('');
     const [numGuest, setNumGuest] = useState('');
+    const [ticketCost, setTicketCost] = useState('');
     const [status, setStatus] = useState({ type: '', message: '' });
 
     useEffect(() => {
@@ -27,6 +28,7 @@ export function EditEvent() {
                 setLocation(eventObj.location || '');
                 setNumTable(eventObj.numTable || '');
                 setNumGuest(eventObj.numGuest || '');
+                setTicketCost(eventObj.ticketCost || '');
                 setStatus({ type: '', message: '' });
             }
         }
@@ -38,7 +40,7 @@ export function EditEvent() {
 
         setStatus({ type: 'loading', message: 'Actualizando evento...' });
 
-        const result = await updateExistingEvent(selectedEventId, { name, date, time, location, numTable, numGuest });
+        const result = await updateExistingEvent(selectedEventId, { name, date, time, location, numTable, numGuest, ticketCost });
 
         if (result.success) {
             setStatus({ type: 'success', message: '¡Evento actualizado con éxito!' });
@@ -180,6 +182,19 @@ export function EditEvent() {
                                 className="custom-input"
                                 value={location}
                                 onChange={(e) => setLocation(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="create-event-group">
+                            <label className="form-label">Costo del boleto ($)</label>
+                            <input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                className="custom-input"
+                                placeholder="Ej. 500.00"
+                                value={ticketCost}
+                                onChange={(e) => setTicketCost(e.target.value)}
                             />
                         </div>
 

@@ -43,7 +43,7 @@ export const deletEventById = async (request, response) => {
 //Create event
 export const createEvent = async (request, response) => {
     try {
-        const { name, date, time, location, numTable, numGuest } = request.body;
+        const { name, date, time, location, numTable, numGuest, ticketCost } = request.body;
         const dateTimeString = time ? `${date}T${time}:00` : `${date}T00:00:00`;
         const eventDate = new Date(dateTimeString);
         
@@ -53,6 +53,7 @@ export const createEvent = async (request, response) => {
 
         dataPayload.numTable = parsedNumTable;
         dataPayload.numGuest = parsedNumGuest;
+        dataPayload.ticketCost = ticketCost !== undefined && ticketCost !== '' ? parseFloat(ticketCost) : 0.0;
 
         const tablesToCreate = [];
         if (parsedNumTable > 0) {
@@ -89,13 +90,14 @@ export const createEvent = async (request, response) => {
 export const updateEvent = async (request, response) => {
     try {
         const { id } = request.params;
-        const { name, date, time, location, numTable, numGuest } = request.body;
+        const { name, date, time, location, numTable, numGuest, ticketCost } = request.body;
         const dateTimeString = time ? `${date}T${time}:00` : `${date}T00:00:00`;
         const eventDate = new Date(dateTimeString);
 
         const dataPayload = { eventName: name, date: eventDate, location };
         if (numTable !== undefined && numTable !== '') dataPayload.numTable = parseInt(numTable);
         if (numGuest !== undefined && numGuest !== '') dataPayload.numGuest = parseInt(numGuest);
+        if (ticketCost !== undefined && ticketCost !== '') dataPayload.ticketCost = parseFloat(ticketCost);
 
         const event = await prisma.event.update({ 
             where: { id: parseInt(id) }, 

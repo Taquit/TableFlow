@@ -179,6 +179,13 @@
     box-shadow: 0 0 10px rgba(46, 204, 113, 0.1);
 }
 
+.status-partial {
+    background: rgba(243, 156, 18, 0.15);
+    color: #f39c12;
+    border: 1px solid rgba(243, 156, 18, 0.3);
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.1);
+}
+
 .status-unpaid {
     background: rgba(231, 76, 60, 0.15);
     color: #f87171;

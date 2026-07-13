@@ -18,6 +18,25 @@ function GuestsPage() {
         removeGuest
     } = useEventGuests(selectedEventId, searchTerm);
 
+    const getPaymentStatus = (guest) => {
+        const currentEvent = events.find(ev => ev.id === parseInt(selectedEventId));
+        const ticketCost = currentEvent?.ticketCost || 0;
+
+        if (ticketCost > 0) {
+            if (guest.amountPaid >= ticketCost) {
+                return { class: 'status-paid', text: `Pagado Completo ($${guest.amountPaid})` };
+            } else if (guest.amountPaid > 0) {
+                return { class: 'status-partial', text: `Pago Parcial ($${guest.amountPaid} / $${ticketCost})` };
+            }
+            return { class: 'status-unpaid', text: 'Pendiente de pago' };
+        } else {
+            if (guest.paid) {
+                return { class: 'status-paid', text: `Pagado ($${guest.amountPaid})` };
+            }
+            return { class: 'status-unpaid', text: 'Pendiente de pago' };
+        }
+    };
+
     return (
         <div className="guest-page-container">
             <div className="guest-page-header">
@@ -70,8 +89,8 @@ function GuestsPage() {
                                     {guest.email && <p>✉️ {guest.email}</p>}
                                     <p>🪑 Mesa: {guest.table ? `#${guest.table.number}` : 'Sin asignar'}</p>
 
-                                    <div className={`guest-status-badge ${guest.paid ? 'status-paid' : 'status-unpaid'}`}>
-                                        {guest.paid ? `Pagado ($${guest.amountPaid})` : 'Pendiente de pago'}
+                                    <div className={`guest-status-badge ${getPaymentStatus(guest).class}`}>
+                                        {getPaymentStatus(guest).text}
                                     </div>
                                 </div>
                             ))}

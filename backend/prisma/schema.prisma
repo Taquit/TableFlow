@@ -12,14 +12,15 @@ datasource db {
 }
 
 model Event {
-  id        Int      @id @default(autoincrement())
-  eventName String
-  date      DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  numTable  Int      @default(0)
-  numGuest  Int      @default(0)
-  location  String?
+  id         Int      @id @default(autoincrement())
+  eventName  String
+  date       DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  numTable   Int      @default(0)
+  numGuest   Int      @default(0)
+  ticketCost Float    @default(0.0)
+  location   String?
 
   tables Table[]
   guests Guest[]

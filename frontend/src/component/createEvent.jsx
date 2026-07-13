@@ -10,6 +10,7 @@ export function CreateEvent() {
     const [location, setLocation] = useState('');
     const [numTable, setNumTable] = useState('');
     const [numGuest, setNumGuest] = useState('');
+    const [ticketCost, setTicketCost] = useState('');
     const [status, setStatus] = useState({ type: '', message: '' });
 
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ export function CreateEvent() {
         e.preventDefault();
         setStatus({ type: 'loading', message: 'Creando evento...' });
 
-        const result = await createNewEvent({ name, date, time, location, numTable, numGuest });
+        const result = await createNewEvent({ name, date, time, location, numTable, numGuest, ticketCost });
 
         if (result.success) {
             setStatus({ type: 'success', message: '¡Evento creado con éxito!' });
@@ -106,6 +107,19 @@ export function CreateEvent() {
                             placeholder="Ej. Salón principal"
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="create-event-group">
+                        <label className="form-label">Costo del boleto ($)</label>
+                        <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            className="custom-input"
+                            placeholder="Ej. 500.00"
+                            value={ticketCost}
+                            onChange={(e) => setTicketCost(e.target.value)}
                         />
                     </div>
 
