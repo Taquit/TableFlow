@@ -7,6 +7,8 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
     const [email, setEmail] = useState(guest?.email || '');
     const [paid, setPaid] = useState(guest?.paid || false);
     const [amountPaid, setAmountPaid] = useState(guest?.amountPaid || 0);
+    const [tableId, setTableId] = useState(guest?.tableId || '');
+    const [tables, setTables] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -16,8 +18,26 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
             setEmail(guest.email || '');
             setPaid(guest.paid || false);
             setAmountPaid(guest.amountPaid || 0);
+            setTableId(guest.tableId || '');
         }
     }, [guest]);
+
+    useEffect(() => {
+        if (guest?.eventId) {
+            const fetchTables = async () => {
+                try {
+                    const res = await fetch(`http://localhost:4000/api/tables/event/${guest.eventId}`);
+                    const data = await res.json();
+                    if (data.success) {
+                        setTables(data.tables || []);
+                    }
+                } catch (err) {
+                    console.error("Error loading tables:", err);
+                }
+            };
+            fetchTables();
+        }
+    }, [guest?.eventId]);
 
     const handleSave = async () => {
         if (!name) {
@@ -32,7 +52,8 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
             name,
             email,
             paid,
-            amountPaid: parseFloat(amountPaid) || 0
+            amountPaid: parseFloat(amountPaid) || 0,
+            tableId: tableId ? parseInt(tableId) : null
         };
 
         const result = await onUpdate(guest.id, guestData);
@@ -68,7 +89,7 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
                 
                 <h3>Editar Invitado</h3>
                 
-                {error && <p style={{ color: '#ff6b6b', marginBottom: '15px' }}>{error}</p>}
+                {error && <p className="edit-guest-error-msg">{error}</p>}
 
                 <div className="edit-guest-form-group">
                     <label>Nombre:</label>
@@ -78,6 +99,21 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
                         onChange={(e) => setName(e.target.value)} 
                         placeholder="Nombre del invitado"
                     />
+                </div>
+
+                <div className="edit-guest-form-group">
+                    <label>Mesa:</label>
+                    <select 
+                        value={tableId}
+                        onChange={(e) => setTableId(e.target.value)}
+                    >
+                        <option value="">-- Sin asignar --</option>
+                        {tables.map(table => (
+                            <option key={table.id} value={table.id}>
+                                Mesa #{table.number} ({table.numSeats} asientos)
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="edit-guest-form-group">

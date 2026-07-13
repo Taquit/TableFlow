@@ -3,7 +3,7 @@ import prisma from '../prisma.js';
 //Get all guests
 export const getAllGuests = async (request, response) => {
     try {
-        const guests = await prisma.guest.findMany();
+        const guests = await prisma.guest.findMany({ include: { table: true } });
         response.json({ success: true, guests });
     } catch (error) {
         response.status(500).json({ success: false, message: 'Error fetching guests' });
@@ -14,7 +14,7 @@ export const getAllGuests = async (request, response) => {
 export const getGuestById = async (request, response) => {
     try {
         const { id } = request.params;
-        const guest = await prisma.guest.findUnique({ where: { id: parseInt(id) } });
+        const guest = await prisma.guest.findUnique({ where: { id: parseInt(id) }, include: { table: true } });
         if (!guest) {
             return response.status(404).json({ success: false, message: 'Guest not found' });
         }
@@ -28,7 +28,7 @@ export const getGuestById = async (request, response) => {
 export const deleteGuestById = async (request, response) => {
     try {
         const { id } = request.params;
-        const guest = await prisma.guest.delete({ where: { id: parseInt(id) } });
+        const guest = await prisma.guest.delete({ where: { id: parseInt(id) }, include: { table: true } });
         if (!guest) {
             return response.status(404).json({ success: false, message: 'Guest not found' });
         }
@@ -42,15 +42,15 @@ export const deleteGuestById = async (request, response) => {
 export const createGuest = async (request, response) => {
     try {
         const { name, email, eventId, tableId, paid, amountPaid } = request.body;
-        const guestData = { 
-            name, 
-            email, 
-            eventId: parseInt(eventId), 
+        const guestData = {
+            name,
+            email,
+            eventId: parseInt(eventId),
             tableId: tableId ? parseInt(tableId) : null,
             paid: paid === true || paid === 'true',
             amountPaid: amountPaid ? parseFloat(amountPaid) : 0.0
         };
-        const guest = await prisma.guest.create({ data: guestData });
+        const guest = await prisma.guest.create({ data: guestData, include: { table: true } });
         response.json({ success: true, guest });
     } catch (error) {
         console.error(error);
@@ -68,7 +68,7 @@ export const updateGuest = async (request, response) => {
         if (tableId !== undefined) dataToUpdate.tableId = tableId === null ? null : parseInt(tableId);
         if (paid !== undefined) dataToUpdate.paid = paid === true || paid === 'true';
         if (amountPaid !== undefined) dataToUpdate.amountPaid = parseFloat(amountPaid);
-        const guest = await prisma.guest.update({ where: { id: parseInt(id) }, data: dataToUpdate });
+        const guest = await prisma.guest.update({ where: { id: parseInt(id) }, data: dataToUpdate, include: { table: true } });
         if (!guest) {
             return response.status(404).json({ success: false, message: 'Guest not found' });
         }
@@ -81,8 +81,8 @@ export const updateGuest = async (request, response) => {
 //Get guests by event id
 export const getGuestsByEventId = async (request, response) => {
     try {
-        const { id } = request.params;
-        const guests = await prisma.guest.findMany({ where: { eventId: parseInt(id) } });
+        const { eventId } = request.params;
+        const guests = await prisma.guest.findMany({ where: { eventId: parseInt(eventId) }, include: { table: true } });
         response.json({ success: true, guests });
     } catch (error) {
         response.status(500).json({ success: false, message: 'Error fetching guests' });
@@ -94,10 +94,21 @@ export const getGuestsByTableIdAndEventId = async (request, response) => {
 
     try {
         const { tableId, eventId } = request.params;
-        const guests = await prisma.guest.findMany({ where: { tableId: parseInt(tableId), eventId: parseInt(eventId) } });
+        const guests = await prisma.guest.findMany({ where: { tableId: parseInt(tableId), eventId: parseInt(eventId) }, include: { table: true } });
         response.json({ success: true, guests });
     } catch (error) {
         response.status(500).json({ success: false, message: 'Error fetching guests' });
     }
 
+}
+
+//Get guest by name and event id
+export const getGuestByNameAndEventId = async (request, response) => {
+    try {
+        const { name, eventId } = request.params;
+        const guest = await prisma.guest.findMany({ where: { name: { contains: name }, eventId: parseInt(eventId) }, include: { table: true } });
+        response.json({ success: true, guest });
+    } catch (error) {
+        response.status(500).json({ success: false, message: 'Error fetching guest' });
+    }
 }

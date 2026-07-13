@@ -8,18 +8,18 @@ export function EventPage() {
     return (
         <div className='main'>
             <h1>Gestión de eventos</h1>
-            <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '30px' }}>Crea un nuevo evento o edita uno existente</p>
+            <p style={{ color: 'rgba(0, 0, 0, 1)', marginBottom: '30px' }}>Crea un nuevo evento o edita uno existente</p>
 
             <div className='btn-container' style={{ marginBottom: '40px' }}>
-                <button 
-                    className='btn-primary' 
+                <button
+                    className='btn-primary'
                     onClick={() => setAction('create')}
                     style={action === 'create' ? { background: 'rgba(255,255,255,0.2)' } : {}}
                 >
                     Crear evento
                 </button>
-                <button 
-                    className='btn-primary' 
+                <button
+                    className='btn-primary'
                     onClick={() => setAction('edit')}
                     style={action === 'edit' ? { background: 'rgba(255,255,255,0.2)' } : {}}
                 >
@@ -29,7 +29,7 @@ export function EventPage() {
 
             {/* Renderizar componente de Crear Evento si action es 'create' */}
             {action === 'create' && <CreateEvent />}
-            
+
             {/* Renderizar componente de Editar Evento si action es 'edit' */}
             {action === 'edit' && <EditEvent />}
         </div>

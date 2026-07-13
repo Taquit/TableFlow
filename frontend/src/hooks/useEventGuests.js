@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const API_URL = 'http://localhost:4000/api';
 
-export function useEventGuests(eventId) {
+export function useEventGuests(eventId, searchTerm = '') {
     const [guests, setGuests] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -12,17 +12,22 @@ export function useEventGuests(eventId) {
             setGuests([]);
             return;
         }
-        
+
         const fetchGuests = async () => {
             setLoading(true);
+
             try {
-                const response = await fetch(`${API_URL}/guests/event/${eventId}`);
+                let url = `${API_URL}/guests/event/${eventId}`;
+                if (searchTerm.trim()) {
+                    url = `${API_URL}/guests/event/${eventId}/name/${encodeURIComponent(searchTerm.trim())}`;
+                }
+                const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error('Error fetching guests');
                 }
                 const data = await response.json();
                 if (data.success) {
-                    setGuests(data.guests);
+                    setGuests(data.guests || data.guest || []);
                 } else {
                     throw new Error(data.message || 'Error fetching guests from API');
                 }
@@ -32,8 +37,13 @@ export function useEventGuests(eventId) {
                 setLoading(false);
             }
         };
-        fetchGuests();
-    }, [eventId]);
+
+        const timeoutId = setTimeout(() => {
+            fetchGuests();
+        }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [eventId, searchTerm]);
 
     const updateGuestData = async (guestId, guestData) => {
         try {

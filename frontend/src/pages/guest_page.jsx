@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useEvent } from '../hooks/useEvent';
 import { useEventGuests } from '../hooks/useEventGuests';
 import EditGuestModal from '../component/editGuest';
@@ -10,22 +10,13 @@ function GuestsPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [editingGuest, setEditingGuest] = useState(null);
 
-    const { 
-        guests, 
-        loading: guestsLoading, 
+    const {
+        guests,
+        loading: guestsLoading,
         error: guestsError,
         updateGuestData,
         removeGuest
-    } = useEventGuests(selectedEventId);
-
-    const filteredGuests = useMemo(() => {
-        if (!searchTerm.trim()) return guests;
-        const lowerSearch = searchTerm.toLowerCase();
-        return guests.filter(g => 
-            g.name?.toLowerCase().includes(lowerSearch) || 
-            g.email?.toLowerCase().includes(lowerSearch)
-        );
-    }, [guests, searchTerm]);
+    } = useEventGuests(selectedEventId, searchTerm);
 
     return (
         <div className="guest-page-container">
@@ -37,8 +28,8 @@ function GuestsPage() {
             <div className="guest-controls">
                 <div className="guest-control-group">
                     <label>Selecciona un Evento:</label>
-                    <select 
-                        value={selectedEventId} 
+                    <select
+                        value={selectedEventId}
                         onChange={(e) => setSelectedEventId(e.target.value)}
                         disabled={eventsLoading}
                     >
@@ -51,12 +42,12 @@ function GuestsPage() {
 
                 <div className="guest-control-group">
                     <label>Buscar Invitado:</label>
-                    <input 
-                        type="text" 
-                        placeholder="Nombre o correo..." 
+                    <input
+                        type="text"
+                        placeholder="Nombre o correo..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        disabled={!selectedEventId || guestsLoading}
+                        disabled={!selectedEventId}
                     />
                 </div>
             </div>
@@ -66,19 +57,19 @@ function GuestsPage() {
 
             {!guestsLoading && !guestsError && selectedEventId && (
                 <>
-                    {filteredGuests.length > 0 ? (
+                    {guests.length > 0 ? (
                         <div className="guest-list-grid">
-                            {filteredGuests.map(guest => (
-                                <div 
-                                    className="guest-card" 
+                            {guests.map(guest => (
+                                <div
+                                    className="guest-card"
                                     key={guest.id}
                                     onClick={() => setEditingGuest(guest)}
                                     title="Haz clic para editar"
                                 >
                                     <h3>{guest.name}</h3>
                                     {guest.email && <p>✉️ {guest.email}</p>}
-                                    <p>🪑 Mesa: {guest.tableId ? `#${guest.tableId}` : 'Sin asignar'}</p>
-                                    
+                                    <p>🪑 Mesa: {guest.table ? `#${guest.table.number}` : 'Sin asignar'}</p>
+
                                     <div className={`guest-status-badge ${guest.paid ? 'status-paid' : 'status-unpaid'}`}>
                                         {guest.paid ? `Pagado ($${guest.amountPaid})` : 'Pendiente de pago'}
                                     </div>

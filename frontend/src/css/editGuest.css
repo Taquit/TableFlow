@@ -62,7 +62,8 @@
 
 .edit-guest-form-group input[type="text"],
 .edit-guest-form-group input[type="email"],
-.edit-guest-form-group input[type="number"] {
+.edit-guest-form-group input[type="number"],
+.edit-guest-form-group select {
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #333;
@@ -73,7 +74,8 @@
 
 .edit-guest-form-group input[type="text"]:focus,
 .edit-guest-form-group input[type="email"]:focus,
-.edit-guest-form-group input[type="number"]:focus {
+.edit-guest-form-group input[type="number"]:focus,
+.edit-guest-form-group select:focus {
     outline: none;
     border-color: #b519ce;
 }
@@ -159,4 +161,9 @@
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+.edit-guest-error-msg {
+    color: #ff6b6b;
+    margin-bottom: 15px;
 }
