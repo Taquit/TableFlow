@@ -108,3 +108,29 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+@media (max-width: 900px) {
+    .tables-layout-container {
+        flex-direction: column;
+    }
+    
+    .tables-sidebar {
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    .tables-grid-4cols {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .tables-main-card.selected,
+    .tables-main-card.unselected {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .tables-grid-4cols {
+        grid-template-columns: 1fr;
+    }
+}

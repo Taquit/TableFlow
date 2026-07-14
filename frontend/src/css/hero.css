@@ -204,3 +204,23 @@
   background: var(--success-color);
 }
 
+@media (max-width: 768px) {
+  .hero-section {
+    padding-top: 120px;
+    padding-bottom: 40px;
+  }
+  .hero-title {
+    font-size: 40px;
+  }
+  .hero-subtitle {
+    font-size: 16px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    padding: 0 20px;
+  }
+  .dashboard-ui-widgets {
+    grid-template-columns: 1fr;
+  }
+}
+

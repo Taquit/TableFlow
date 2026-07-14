@@ -67,6 +67,18 @@
     flex-direction: column;
     gap: 20px;
   }
+  
+  .cta-banner {
+    padding: 40px 20px;
+  }
+
+  .cta-title {
+    font-size: 28px;
+  }
+
+  .cta-desc {
+    font-size: 15px;
+  }
 }
 
 .footer-text {

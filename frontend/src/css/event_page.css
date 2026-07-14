@@ -75,3 +75,19 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 600px) {
+    #eventPage {
+        padding: 40px 15px;
+    }
+    #eventPage h1 {
+        font-size: 2rem;
+    }
+    #eventPage .event-actions-container {
+        padding: 20px;
+        flex-direction: column;
+    }
+    .add-btn, .edit-btn {
+        width: 100%;
+    }
+}
