@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const API_URL = 'http://localhost:4000/api';
+import { apiCall } from '../utils/apiCall';
 
 export const useAccounting = (eventId) => {
     const [accountingData, setAccountingData] = useState(null);
@@ -17,7 +18,7 @@ export const useAccounting = (eventId) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`${API_URL}/events/${eventId}/accounting`);
+                const response = await apiCall(`${API_URL}/events/${eventId}/accounting`);
                 if (!response.ok) {
                     throw new Error('Error al obtener los datos contables');
                 }

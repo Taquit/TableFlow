@@ -6,6 +6,7 @@ import prisma from './prisma.js';
 import eventRoutes from './routes/eventRout.js';
 import guestRoutes from './routes/guestRout.js';
 import tableRoutes from './routes/tableRoute.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -51,6 +52,7 @@ app.get('/', (req, res) => {
 app.use('/api/events', eventRoutes);
 app.use('/api/guests', guestRoutes);
 app.use('/api/tables', tableRoutes);
+app.use('/api/auth', authRoutes);
 
 // Levantar el servidor
 app.listen(port, () => {

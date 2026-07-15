@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const API_URL = 'http://localhost:4000/api';
+import { apiCall } from '../utils/apiCall';
 
 export function useEventGuests(eventId, searchTerm = '') {
     const [guests, setGuests] = useState([]);
@@ -21,7 +22,7 @@ export function useEventGuests(eventId, searchTerm = '') {
                 if (searchTerm.trim()) {
                     url = `${API_URL}/guests/event/${eventId}/name/${encodeURIComponent(searchTerm.trim())}`;
                 }
-                const response = await fetch(url);
+                const response = await apiCall(url);
                 if (!response.ok) {
                     throw new Error('Error fetching guests');
                 }
@@ -47,7 +48,7 @@ export function useEventGuests(eventId, searchTerm = '') {
 
     const updateGuestData = async (guestId, guestData) => {
         try {
-            const response = await fetch(`${API_URL}/guests/${guestId}`, {
+            const response = await apiCall(`${API_URL}/guests/${guestId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(guestData)
@@ -66,7 +67,7 @@ export function useEventGuests(eventId, searchTerm = '') {
 
     const removeGuest = async (guestId) => {
         try {
-            const response = await fetch(`${API_URL}/guests/${guestId}`, {
+            const response = await apiCall(`${API_URL}/guests/${guestId}`, {
                 method: 'DELETE'
             });
             const data = await response.json();

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 const API_URL = 'http://localhost:4000/api';
-
-
+import { apiCall } from '../utils/apiCall';
 export function useEvent(){
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -11,7 +10,7 @@ export function useEvent(){
         const fetchEvents = async()=>{
             try{
                 setLoading(true);
-                const response = await fetch(`${API_URL}/events`);
+                const response = await apiCall(`${API_URL}/events`);
                 if(!response.ok){
                     throw new Error('Failed to fetch events');
                 }
@@ -33,7 +32,7 @@ export function useEvent(){
 
     const createNewEvent = async (eventData) => {
         try {
-            const response = await fetch(`${API_URL}/events`, {
+            const response = await apiCall(`${API_URL}/events`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(eventData)
@@ -53,7 +52,7 @@ export function useEvent(){
 
     const updateExistingEvent = async (id, eventData) => {
         try {
-            const response = await fetch(`${API_URL}/events/${id}`, {
+            const response = await apiCall(`${API_URL}/events/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(eventData)
@@ -73,7 +72,7 @@ export function useEvent(){
 
     const deleteExistingEvent = async (id) => {
         try {
-            const response = await fetch(`${API_URL}/events/${id}`, {
+            const response = await apiCall(`${API_URL}/events/${id}`, {
                 method: 'DELETE'
             });
             const data = await response.json();

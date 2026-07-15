@@ -1,8 +1,9 @@
 const API_URL = 'http://localhost:4000/api';
+import { apiCall } from '../utils/apiCall';
 
 
 export const getEvents = async () => {
-    const response = await fetch(`${API_URL}/events`);
+    const response = await apiCall(`${API_URL}/events`);
     if (!response.ok) {
         throw new Error('Error al obtener los eventos');
     }
@@ -12,7 +13,7 @@ export const getEvents = async () => {
 }
 
 export const getTables = async () => {
-    const response = await fetch(`${API_URL}/tables`);
+    const response = await apiCall(`${API_URL}/tables`);
     if (!response.ok) {
         throw new Error('Error al obtener las mesas');
     }
@@ -20,7 +21,7 @@ export const getTables = async () => {
 }
 
 export const getGuests = async () => {
-    const response = await fetch(`${API_URL}/guests`);
+    const response = await apiCall(`${API_URL}/guests`);
     if (!response.ok) {
         throw new Error('Error al obtener los invitados');
     }

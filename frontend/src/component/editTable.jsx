@@ -3,6 +3,7 @@ import { useGuests } from '../hooks/useGuests';
 import { useEvent } from '../hooks/useEvent';
 import CreatGuest from './creatGuest';
 import EditGuestModal from './editGuest';
+import { useAuth } from '../context/AuthContext';
 import '../css/editTable.css';
 
 export const EditTable = ({ tableId, eventId, tableNumber, onDeleteTable }) => {
@@ -10,6 +11,8 @@ export const EditTable = ({ tableId, eventId, tableNumber, onDeleteTable }) => {
     const [selectedTableGuests, setSelectedTableGuests] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingGuest, setEditingGuest] = useState(null);
+    const { user } = useAuth();
+    const isAdmin = user && user.role === 'ADMIN';
 
     const { events } = useEvent();
     const currentEvent = events?.find(e => e.id === parseInt(eventId));
@@ -31,13 +34,15 @@ export const EditTable = ({ tableId, eventId, tableNumber, onDeleteTable }) => {
                 <h3 className="edit-table-title">Mesa #{tableNumber}</h3>
                 <p className="edit-table-desc">Asigna o edita los invitados de esta mesa.</p>
 
-                <button
-                    className="edit-table-add-btn"
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    + Añadir Invitado
-                </button>
-                {onDeleteTable && (
+                {isAdmin && (
+                    <button
+                        className="edit-table-add-btn"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        + Añadir Invitado
+                    </button>
+                )}
+                {isAdmin && onDeleteTable && (
                     <button
                         className="edit-table-add-btn"
                         style={{ background: '#ef4444', marginTop: '10px' }}
@@ -62,8 +67,9 @@ export const EditTable = ({ tableId, eventId, tableNumber, onDeleteTable }) => {
                     <div
                         className={`guest-item ${getPaymentClass(g)}`}
                         key={g.id}
-                        onClick={() => setEditingGuest(g)}
-                        title="Haz clic para editar invitado"
+                        onClick={() => isAdmin ? setEditingGuest(g) : null}
+                        style={{ cursor: isAdmin ? 'pointer' : 'default' }}
+                        title={isAdmin ? "Haz clic para editar invitado" : ""}
                     >
                         <span className="guest-name">{g.name}</span>
                         {/* Puedes descomentar u ocultar otros datos */}

@@ -1,11 +1,20 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+        setIsOpen(false);
     };
 
     return (
@@ -29,6 +38,11 @@ function Navbar() {
                     <li><Link to="/guests" onClick={toggleMenu}>Gestión Invitados</Link></li>
                     <li><Link to="/accounting" onClick={toggleMenu}>Contaduría</Link></li>
                     <li><Link to="/export" onClick={toggleMenu}>Exportar</Link></li>
+                    {user ? (
+                        <li><a href="#" onClick={handleLogout} style={{ fontWeight: 'bold' }}>Salir</a></li>
+                    ) : (
+                        <li><Link to="/login" onClick={toggleMenu} style={{ fontWeight: 'bold' }}>Login</Link></li>
+                    )}
                 </ul>
             </div>
         </nav>

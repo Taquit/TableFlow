@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 const API_URL = 'http://localhost:4000/api';
+import { apiCall } from '../utils/apiCall';
 
 export function useTables(eventId) {
     const [tables, setTables] = useState([]);
@@ -11,7 +12,7 @@ export function useTables(eventId) {
         const fetchTables = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`${API_URL}/tables/event/${eventId}`);
+                const response = await apiCall(`${API_URL}/tables/event/${eventId}`);
                 if (!response.ok) {
                     throw new Error('Error fetching tables');
                 }
@@ -36,7 +37,7 @@ export function useTables(eventId) {
 
     const deleteTable = async (tableId) => {
         try {
-            const response = await fetch(`${API_URL}/tables/${tableId}`, {
+            const response = await apiCall(`${API_URL}/tables/${tableId}`, {
                 method: 'DELETE'
             });
             const data = await response.json();

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useEvent } from '../hooks/useEvent';
 import { useEventGuests } from '../hooks/useEventGuests';
 import EditGuestModal from '../component/editGuest';
+import { useAuth } from '../context/AuthContext';
 import '../css/guest_page.css';
 
 function GuestsPage() {
@@ -9,6 +10,8 @@ function GuestsPage() {
     const [selectedEventId, setSelectedEventId] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [editingGuest, setEditingGuest] = useState(null);
+    const { user } = useAuth();
+    const isAdmin = user && user.role === 'ADMIN';
 
     const {
         guests,
@@ -82,8 +85,9 @@ function GuestsPage() {
                                 <div
                                     className="guest-card"
                                     key={guest.id}
-                                    onClick={() => setEditingGuest(guest)}
-                                    title="Haz clic para editar"
+                                    onClick={() => isAdmin ? setEditingGuest(guest) : null}
+                                    style={{ cursor: isAdmin ? 'pointer' : 'default' }}
+                                    title={isAdmin ? "Haz clic para editar" : ""}
                                 >
                                     <h3>{guest.name}</h3>
                                     {guest.phone && <p>📞 {guest.phone}</p>}

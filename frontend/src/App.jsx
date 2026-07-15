@@ -8,6 +8,7 @@ import EventPage from './pages/event_page';
 import GuestsPage from './pages/guest_page';
 import MoneyPage from './pages/money_page';
 import ExcelPage from './pages/excel_page';
+import LoginPage from './pages/login_page';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Navbar />
 
       <Routes>
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/tables" element={<TablesPage />} />
         <Route path="/event" element={<EventPage />} />
