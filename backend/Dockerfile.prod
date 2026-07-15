@@ -1,0 +1,27 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+# Instalar pnpm globalmente
+RUN npm install -g pnpm@11.10.0
+
+# Copiar los archivos de definición de paquetes
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+
+# Instalar dependencias 
+# Usamos pnpm install normal, ya que necesitamos todo para construir Prisma
+RUN pnpm install
+
+# Copiar esquema de Prisma
+COPY prisma ./prisma/
+
+# Generar cliente de Prisma
+RUN pnpm exec prisma generate
+
+# Copiar el código fuente
+COPY . .
+
+EXPOSE 4000
+
+# Comando para producción: arrancar con node directamente en vez de nodemon/watch
+CMD ["node", "src/index.js"]
