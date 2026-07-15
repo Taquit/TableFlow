@@ -3,11 +3,10 @@ services:
     image: postgres:15-alpine
     container_name: pparty-db-prod
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: pparty
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    # Puerto 5432 NO expuesto al exterior, solo accesible entre contenedores
     volumes:
       - pparty_data_prod:/var/lib/postgresql/data
     restart: always
@@ -17,8 +16,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile.prod
     container_name: pparty-backend-prod
-    ports:
-      - "4000:4000"
+    # Puerto 4000 NO expuesto al exterior, nginx hace de proxy
     env_file:
       - .env
     depends_on:
@@ -30,8 +28,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.prod
       args:
-        # Pasa el API URL al builder de Vite
-        - VITE_API_URL=${FRONTEND_VITE_API_URL:-http://localhost:4000/api}
+        # Con nginx de proxy, el browser llama a la misma IP/dominio sin puerto
+        - VITE_API_URL=${FRONTEND_VITE_API_URL}
     container_name: pparty-frontend-prod
     ports:
       - "80:80"

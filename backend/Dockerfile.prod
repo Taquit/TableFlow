@@ -23,5 +23,8 @@ COPY . .
 
 EXPOSE 4000
 
-# Comando para producción: arrancar con node directamente en vez de nodemon/watch
-CMD ["node", "src/index.js"]
+# Script de arranque: corre migraciones y luego inicia el servidor
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+
+CMD ["./docker-entrypoint.sh"]
