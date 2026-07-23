@@ -3,9 +3,9 @@ services:
     image: postgres:15-alpine
     container_name: pparty-db-prod
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
     # Puerto 5432 NO expuesto al exterior, solo accesible entre contenedores
     volumes:
       - pparty_data_prod:/var/lib/postgresql/data

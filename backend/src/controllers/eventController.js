@@ -112,9 +112,15 @@ export const updateEvent = async (request, response) => {
             });
             
             if (newNumTable > currentTables.length) {
+                let maxTableNumber = 0;
+                if (currentTables.length > 0) {
+                    maxTableNumber = Math.max(...currentTables.map(t => t.number));
+                }
+                
+                const numToCreate = newNumTable - currentTables.length;
                 const tablesToCreate = [];
-                for (let i = currentTables.length + 1; i <= newNumTable; i++) {
-                    tablesToCreate.push({ number: i, numSeats: 8, eventId: parseInt(id) });
+                for (let i = 1; i <= numToCreate; i++) {
+                    tablesToCreate.push({ number: maxTableNumber + i, numSeats: 8, eventId: parseInt(id) });
                 }
                 if (tablesToCreate.length > 0) {
                     await prisma.table.createMany({ data: tablesToCreate });

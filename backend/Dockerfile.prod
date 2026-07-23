@@ -23,6 +23,9 @@ COPY . .
 
 EXPOSE 4000
 
+# Borrar caché de pnpm para reducir el peso de la imagen de producción
+RUN rm -rf /root/.local/share/pnpm/store
+
 # Script de arranque: corre migraciones y luego inicia el servidor
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh

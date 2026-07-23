@@ -44,8 +44,8 @@ const LoginPage = () => {
     return (
         <div className="login-container">
             <div className="login-card">
-                <h1 className="login-title">Admin Login</h1>
-                <p className="login-subtitle">Sign in to manage events and tables</p>
+                <h1 className="login-title">Inicio de Sesión</h1>
+                <p className="login-subtitle">Inicia sesión con tu cuenta de Administrador o Espectador</p>
                 
                 {error && <div className="login-error">{error}</div>}
                 

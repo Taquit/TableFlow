@@ -5,8 +5,13 @@ WORKDIR /app
 # Instalar pnpm globalmente
 RUN npm install -g pnpm@11.10.0
 
+# --- CONFIGURACIÓN NUEVA ---
+# Le decimos a pnpm que guarde su caché estrictamente en el directorio de trabajo
+# para evitar conflictos de volúmenes con Docker Compose
+RUN pnpm config set store-dir /app/.pnpm-store
+# ---------------------------
+
 # Copiar los archivos de definición de paquetes
-# Ahora copiamos el archivo de bloqueo específico de pnpm
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 
 # Instalar las dependencias usando pnpm

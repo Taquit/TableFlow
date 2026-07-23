@@ -5,6 +5,9 @@ WORKDIR /app
 # Instalar pnpm globalmente
 RUN npm install -g pnpm@11.10.0
 
+# Configurar pnpm para usar el directorio de caché local
+RUN pnpm config set store-dir /app/.pnpm-store
+
 # Copiar los archivos de definición de paquetes
 # Nota: pnpm usa pnpm-lock.yaml en lugar de package-lock.json
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./

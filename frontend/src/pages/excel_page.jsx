@@ -24,6 +24,7 @@ export function ExcelPage() {
 
         // Columnas
         worksheet.columns = [
+            { header: 'No. Boleto', key: 'boletNumber', width: 15 },
             { header: 'Nombre del Invitado', key: 'name', width: 30 },
             { header: 'Mesa Asignada', key: 'table', width: 20 },
             { header: 'Monto Pagado', key: 'amountPaid', width: 20 },
@@ -37,6 +38,7 @@ export function ExcelPage() {
         // Añadir filas
         guests.forEach(guest => {
             worksheet.addRow({
+                boletNumber: guest.boletNumber ? guest.boletNumber : 'N/A',
                 name: guest.name,
                 table: guest.table ? `Mesa ${guest.table.number}` : 'Sin mesa',
                 amountPaid: guest.amountPaid > 0 ? `$${guest.amountPaid}` : '$0',

@@ -8,37 +8,52 @@ export const login = async (req, res) => {
     try {
         const { username, password } = req.body;
         
-        // Find user
+        // 1. Intentar buscar en la tabla Admin
+        const admin = await prisma.admin.findUnique({
+            where: { username }
+        });
+        
+        if (admin) {
+            const isMatch = await bcrypt.compare(password, admin.password);
+            if (!isMatch) {
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
+            }
+            const token = jwt.sign(
+                { id: admin.id, username: admin.username, role: 'ADMIN' },
+                JWT_SECRET,
+                { expiresIn: '24h' }
+            );
+            return res.json({
+                success: true,
+                token,
+                user: { id: admin.id, username: admin.username, role: 'ADMIN' }
+            });
+        }
+        
+        // 2. Intentar buscar en la tabla User (espectadores)
         const user = await prisma.user.findUnique({
             where: { username }
         });
         
-        if (!user) {
-            return res.status(401).json({ success: false, message: 'Invalid credentials' });
-        }
-        
-        // Check password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ success: false, message: 'Invalid credentials' });
-        }
-        
-        // Generate token
-        const token = jwt.sign(
-            { id: user.id, username: user.username, role: user.role },
-            JWT_SECRET,
-            { expiresIn: '24h' }
-        );
-        
-        res.json({
-            success: true,
-            token,
-            user: {
-                id: user.id,
-                username: user.username,
-                role: user.role
+        if (user) {
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
             }
-        });
+            const token = jwt.sign(
+                { id: user.id, username: user.username, role: 'VIEWER' },
+                JWT_SECRET,
+                { expiresIn: '24h' }
+            );
+            return res.json({
+                success: true,
+                token,
+                user: { id: user.id, username: user.username, role: 'VIEWER' }
+            });
+        }
+        
+        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
@@ -46,7 +61,7 @@ export const login = async (req, res) => {
 
 export const seedAdmin = async (req, res) => {
     try {
-        const existingAdmin = await prisma.user.findUnique({
+        const existingAdmin = await prisma.admin.findUnique({
             where: { username: 'admin' }
         });
         
@@ -57,15 +72,14 @@ export const seedAdmin = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash('admin123', salt);
         
-        const admin = await prisma.user.create({
+        const admin = await prisma.admin.create({
             data: {
                 username: 'admin',
-                password: hashedPassword,
-                role: 'ADMIN'
+                password: hashedPassword
             }
         });
         
-        res.json({ success: true, message: 'Admin seeded successfully' });
+        res.json({ success: true, message: 'Admin seeded successfully into Admin table' });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }

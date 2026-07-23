@@ -34,6 +34,8 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    env_file:
+      - .env
     environment:
       - CI=true
     depends_on:
