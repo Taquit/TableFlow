@@ -67,8 +67,3 @@ model User {
   role     Role   @default(VIEWER)
 }
 
-model Admin {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  password String
-}
