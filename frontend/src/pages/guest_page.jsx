@@ -91,7 +91,7 @@ function GuestsPage() {
                                 >
                                     <h3>{guest.name}</h3>
                                     {guest.phone && <p>📞 {guest.phone}</p>}
-                                    <p>🪑 Mesa: {guest.table ? `#${guest.table.number}` : 'Sin asignar'}</p>
+                                    <p>🪑 Mesa: {guest.table ? `#${guest.table.number}` : 'Sin asignar'} | 🎫 Boleto: {guest.boletNumber ? `#${guest.boletNumber}` : 'N/A'}</p>
 
                                     <div className={`guest-status-badge ${getPaymentStatus(guest).class}`}>
                                         {getPaymentStatus(guest).text}

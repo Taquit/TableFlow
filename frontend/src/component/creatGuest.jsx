@@ -5,6 +5,7 @@ import '../css/creatGuest.css';
 export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
+    const [boletNumber, setBoletNumber] = useState('');
     const [paid, setPaid] = useState(false);
     const [amountPaid, setAmountPaid] = useState('');
     const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
         const result = await onAddGuest({
             name,
             phone,
+            boletNumber: boletNumber ? parseInt(boletNumber) : null,
             eventId,
             tableId,
             paid,
@@ -62,6 +64,17 @@ export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="Ej. 123456789"
+                        />
+                    </div>
+
+                    <div className="creat-guest-group">
+                        <label className="creat-guest-label">Número de Boleto</label>
+                        <input
+                            type="number"
+                            className="creat-guest-input"
+                            value={boletNumber}
+                            onChange={(e) => setBoletNumber(e.target.value)}
+                            placeholder="Ej. 101"
                         />
                     </div>
 

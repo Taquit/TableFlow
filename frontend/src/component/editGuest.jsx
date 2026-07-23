@@ -5,6 +5,7 @@ import '../css/editGuest.css';
 const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
     const [name, setName] = useState(guest?.name || '');
     const [phone, setPhone] = useState(guest?.phone || '');
+    const [boletNumber, setBoletNumber] = useState(guest?.boletNumber || '');
     const [paid, setPaid] = useState(guest?.paid || false);
     const [amountPaid, setAmountPaid] = useState(guest?.amountPaid || 0);
     const [tableId, setTableId] = useState(guest?.tableId || '');
@@ -16,6 +17,7 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
         if (guest) {
             setName(guest.name || '');
             setPhone(guest.phone || '');
+            setBoletNumber(guest.boletNumber || '');
             setPaid(guest.paid || false);
             setAmountPaid(guest.amountPaid || 0);
             setTableId(guest.tableId || '');
@@ -51,6 +53,7 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
         const guestData = {
             name,
             phone,
+            boletNumber: boletNumber ? parseInt(boletNumber) : null,
             paid,
             amountPaid: parseFloat(amountPaid) || 0,
             tableId: tableId ? parseInt(tableId) : null
@@ -123,6 +126,16 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
                         value={phone} 
                         onChange={(e) => setPhone(e.target.value)} 
                         placeholder="Ej. 123456789"
+                    />
+                </div>
+
+                <div className="edit-guest-form-group">
+                    <label>Número de Boleto:</label>
+                    <input 
+                        type="number" 
+                        value={boletNumber} 
+                        onChange={(e) => setBoletNumber(e.target.value)} 
+                        placeholder="Ej. 101"
                     />
                 </div>
 

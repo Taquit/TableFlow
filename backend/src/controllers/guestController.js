@@ -41,10 +41,11 @@ export const deleteGuestById = async (request, response) => {
 //Create guest
 export const createGuest = async (request, response) => {
     try {
-        const { name, phone, eventId, tableId, paid, amountPaid } = request.body;
+        const { name, phone, eventId, tableId, paid, amountPaid, boletNumber } = request.body;
         const guestData = {
             name,
             phone,
+            boletNumber: boletNumber ? parseInt(boletNumber) : null,
             eventId: parseInt(eventId),
             tableId: tableId ? parseInt(tableId) : null,
             paid: paid === true || paid === 'true',
@@ -62,8 +63,9 @@ export const createGuest = async (request, response) => {
 export const updateGuest = async (request, response) => {
     try {
         const { id } = request.params;
-        const { name, phone, eventId, tableId, paid, amountPaid } = request.body;
+        const { name, phone, eventId, tableId, paid, amountPaid, boletNumber } = request.body;
         const dataToUpdate = { name, phone };
+        if (boletNumber !== undefined) dataToUpdate.boletNumber = boletNumber ? parseInt(boletNumber) : null;
         if (eventId !== undefined) dataToUpdate.eventId = parseInt(eventId);
         if (tableId !== undefined) dataToUpdate.tableId = tableId === null ? null : parseInt(tableId);
         if (paid !== undefined) dataToUpdate.paid = paid === true || paid === 'true';
