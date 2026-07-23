@@ -9,6 +9,7 @@
   border: 1px solid var(--dark-border);
   background: rgba(255, 255, 255, 0.95);
   transition: var(--transition-smooth);
+  box-sizing: border-box;
 }
 
 .navbar.scrolled {
