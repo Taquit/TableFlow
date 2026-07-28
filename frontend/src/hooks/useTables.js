@@ -52,5 +52,23 @@ export function useTables(eventId) {
         }
     };
 
-    return { tables, loading, error, deleteTable };
+    const updateTableCapacity = async (tableId, numSeats) => {
+        try {
+            const response = await apiCall(`${API_URL}/tables/${tableId}`, {
+                method: 'PUT',
+                body: JSON.stringify({ numSeats: parseInt(numSeats) })
+            });
+            const data = await response.json();
+            if (data.success) {
+                setTables(prev => prev.map(t => t.id === parseInt(tableId) ? { ...t, numSeats: parseInt(numSeats) } : t));
+                return { success: true, table: data.table };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            return { success: false, error: 'Error de red al actualizar la mesa' };
+        }
+    };
+
+    return { tables, loading, error, deleteTable, updateTableCapacity };
 }
