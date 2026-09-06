@@ -21,3 +21,6 @@ yarn-error.log*
 /MD_files/
 
 .pnpm-store
+
+# sst
+.sst

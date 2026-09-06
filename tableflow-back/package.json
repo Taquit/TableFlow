@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.163",
+    "@types/pg": "^8.23.1"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.115.0",
+    "pg": "^8.23.0",
+    "sst": "^4.17.1"
+  }
+}
