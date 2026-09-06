@@ -28,7 +28,7 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
         if (guest?.eventId) {
             const fetchTables = async () => {
                 try {
-                    const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/tables/event/${guest.eventId}`);
+                    const res = await fetch(`${import.meta.env.BACKEND_API || 'http://localhost:4000/api'}/tables/event/${guest.eventId}`);
                     const data = await res.json();
                     if (data.success) {
                         setTables(data.tables || []);
