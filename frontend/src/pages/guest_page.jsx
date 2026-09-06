@@ -85,9 +85,9 @@ function GuestsPage() {
                                 <div
                                     className="guest-card"
                                     key={guest.id}
-                                    onClick={() => setEditingGuest(guest)}
-                                    style={{ cursor: 'pointer' }}
-                                    title="Haz clic para editar"
+                                    onClick={() => user && setEditingGuest(guest)}
+                                    style={{ cursor: user ? 'pointer' : 'default' }}
+                                    title={user ? "Haz clic para editar" : ""}
                                 >
                                     <h3>{guest.name}</h3>
                                     {guest.phone && <p>📞 {guest.phone}</p>}

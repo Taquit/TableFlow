@@ -4,7 +4,7 @@ import { EditTable } from './editTable.jsx'
 
 function Tables({ eventId }) {
     const [selectedTableId, setSelectedTableId] = useState(null);
-    const { tables, loading, error, deleteTable } = useTables(eventId);
+    const { tables, loading, error, deleteTable, updateTableCapacity } = useTables(eventId);
     const [selectedTableNumber, setSelectedTableNumber] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const tablesPerPage = 12;
@@ -92,6 +92,7 @@ function Tables({ eventId }) {
                                     tableId={selectedTableId} 
                                     eventId={eventId} 
                                     tableNumber={selectedTableNumber} 
+                                    currentCapacity={tables.find(t => t.id === selectedTableId)?.numSeats}
                                     onDeleteTable={async () => {
                                         const res = await deleteTable(selectedTableId);
                                         if (res.success) {
@@ -99,6 +100,9 @@ function Tables({ eventId }) {
                                             setSelectedTableNumber(null);
                                         }
                                         return res;
+                                    }}
+                                    onUpdateCapacity={async (newCapacity) => {
+                                        return await updateTableCapacity(selectedTableId, newCapacity);
                                     }}
                                 />
                             </div>
