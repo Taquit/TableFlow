@@ -7,9 +7,7 @@ export const getEvents = async () => {
     if (!response.ok) {
         throw new Error('Error al obtener los eventos');
     }
-    const data = await response.json();
-    if (data.succes)
-        return response.json();
+    return response.json();
 }
 
 export const getTables = async () => {

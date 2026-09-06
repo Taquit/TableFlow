@@ -23,7 +23,7 @@ export const useAccounting = (eventId) => {
                     throw new Error('Error al obtener los datos contables');
                 }
                 const data = await response.json();
-                if (data.success) {
+                if (!data.error) {
                     setAccountingData({
                         totalCollected: data.totalCollected,
                         tablesData: data.tablesData,

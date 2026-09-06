@@ -15,8 +15,8 @@ export function useEvent(){
                     throw new Error('Failed to fetch events');
                 }
                 const data = await response.json();
-                if(data.succes){
-                    setEvents(data.events);
+                if(!data.error){
+                    setEvents(data);
                 }else{
                     throw new Error(data.message || 'Failed to fetch events from API');
                 } 
@@ -38,10 +38,10 @@ export function useEvent(){
                 body: JSON.stringify(eventData)
             });
             const data = await response.json();
-            if (data.success) {
+            if (!data.error) {
                 // Actualizar la lista de eventos localmente
-                setEvents(prev => [...prev, data.event]);
-                return { success: true, event: data.event };
+                setEvents(prev => [...prev, data]);
+                return { success: true, event: data };
             } else {
                 return { success: false, error: data.error };
             }
@@ -58,10 +58,10 @@ export function useEvent(){
                 body: JSON.stringify(eventData)
             });
             const data = await response.json();
-            if (data.success) {
+            if (!data.error) {
                 // Actualizar la lista localmente
-                setEvents(prev => prev.map(ev => ev.id === parseInt(id) ? data.event : ev));
-                return { success: true, event: data.event };
+                setEvents(prev => prev.map(ev => ev.id === parseInt(id) ? data : ev));
+                return { success: true, event: data };
             } else {
                 return { success: false, error: data.error };
             }
@@ -76,7 +76,7 @@ export function useEvent(){
                 method: 'DELETE'
             });
             const data = await response.json();
-            if (data.success) {
+            if (!data.error) {
                 // Remove from local list
                 setEvents(prev => prev.filter(ev => ev.id !== parseInt(id)));
                 return { success: true };

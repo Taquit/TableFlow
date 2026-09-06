@@ -17,8 +17,8 @@ export function useTables(eventId) {
                     throw new Error('Error fetching tables');
                 }
                 const data = await response.json();
-                if (data.success) {
-                    setTables(data.tables);
+                if (!data.error) {
+                    setTables(data);
                 } else {
                     throw new Error(data.message || 'Error fetching tables from API');
                 }
@@ -41,7 +41,7 @@ export function useTables(eventId) {
                 method: 'DELETE'
             });
             const data = await response.json();
-            if (data.success) {
+            if (!data.error) {
                 setTables(prev => prev.filter(t => t.id !== parseInt(tableId)));
                 return { success: true };
             } else {

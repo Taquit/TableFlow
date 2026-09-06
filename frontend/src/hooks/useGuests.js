@@ -17,8 +17,8 @@ export function useGuests(eventId, tableId) {
                     throw new Error('Error fetching guests');
                 }
                 const data = await response.json();
-                if (data.success) {
-                    setGuests(data.guests);
+                if (!data.error) {
+                    setGuests(data);
                 } else {
                     throw new Error(data.message || 'Error fetching guests from API');
                 }
@@ -39,9 +39,9 @@ export function useGuests(eventId, tableId) {
                 body: JSON.stringify(guestData)
             });
             const data = await response.json();
-            if (data.success) {
-                setGuests(prev => [...prev, data.guest]);
-                return { success: true, guest: data.guest };
+            if (!data.error) {
+                setGuests(prev => [...prev, data]);
+                return { success: true, guest: data };
             } else {
                 return { success: false, error: data.message || 'Error al crear invitado' };
             }
@@ -58,9 +58,9 @@ export function useGuests(eventId, tableId) {
                 body: JSON.stringify(guestData)
             });
             const data = await response.json();
-            if (data.success) {
-                setGuests(prev => prev.map(g => g.id === guestId ? data.guest : g));
-                return { success: true, guest: data.guest };
+            if (!data.error) {
+                setGuests(prev => prev.map(g => g.id === guestId ? data : g));
+                return { success: true, guest: data };
             } else {
                 return { success: false, error: data.message || 'Error al actualizar invitado' };
             }
@@ -75,7 +75,7 @@ export function useGuests(eventId, tableId) {
                 method: 'DELETE'
             });
             const data = await response.json();
-            if (data.success) {
+            if (!data.error) {
                 setGuests(prev => prev.filter(g => g.id !== guestId));
                 return { success: true };
             } else {
