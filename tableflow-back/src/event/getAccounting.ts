@@ -12,7 +12,32 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         const eventRes = await client.query('SELECT * FROM "Event" WHERE id = $1;', [parseInt(id)]);
         if (eventRes.rows.length === 0) return { statusCode: 404, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "Evento no encontrado" }) };
         
+        // Get total collected
         const guestsRes = await client.query('SELECT SUM("amountPaid") as "totalCollected" FROM "Guest" WHERE "eventId" = $1;', [parseInt(id)]);
+        const totalCollected = parseFloat(guestsRes.rows[0].totalCollected || 0);
+
+        // Get unassigned collected
+        const unassignedRes = await client.query('SELECT SUM("amountPaid") as "unassignedCollected" FROM "Guest" WHERE "eventId" = $1 AND "tableId" IS NULL;', [parseInt(id)]);
+        const unassignedCollected = parseFloat(unassignedRes.rows[0].unassignedCollected || 0);
+
+        // Get tables data
+        const tablesRes = await client.query(`
+            SELECT t.id, t.number, 
+                   COUNT(g.id) as "guestsCount", 
+                   COALESCE(SUM(g."amountPaid"), 0) as "collected"
+            FROM "Table" t
+            LEFT JOIN "Guest" g ON t.id = g."tableId"
+            WHERE t."eventId" = $1
+            GROUP BY t.id, t.number
+            ORDER BY t.number;
+        `, [parseInt(id)]);
+
+        const tablesData = tablesRes.rows.map(row => ({
+            id: row.id,
+            number: row.number,
+            guestsCount: parseInt(row.guestsCount, 10),
+            collected: parseFloat(row.collected)
+        }));
         
         return { 
             statusCode: 200, 
@@ -20,7 +45,9 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
             body: JSON.stringify({ 
                 event: eventRes.rows[0].eventName,
                 ticketCost: eventRes.rows[0].ticketCost,
-                totalCollected: guestsRes.rows[0].totalCollected || 0
+                totalCollected: totalCollected,
+                tablesData: tablesData,
+                unassignedCollected: unassignedCollected
             }) 
         };
     } catch (error) {

@@ -59,9 +59,9 @@ export function useTables(eventId) {
                 body: JSON.stringify({ numSeats: parseInt(numSeats) })
             });
             const data = await response.json();
-            if (data.success) {
+            if (!data.error) {
                 setTables(prev => prev.map(t => t.id === parseInt(tableId) ? { ...t, numSeats: parseInt(numSeats) } : t));
-                return { success: true, table: data.table };
+                return { success: true, table: data };
             } else {
                 return { success: false, error: data.error };
             }

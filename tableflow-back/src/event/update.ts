@@ -10,8 +10,9 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         if (!id) return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "ID requerido" }) };
         
         const body = JSON.parse(event.body || "{}");
+        const eventName = body.name || body.eventName;
         const query = 'UPDATE "Event" SET "eventName" = COALESCE($1, "eventName"), "ticketCost" = COALESCE($2, "ticketCost"), location = COALESCE($3, location), "updatedAt" = NOW() WHERE id = $4 RETURNING *;';
-        const result = await client.query(query, [body.eventName, body.ticketCost, body.location, parseInt(id)]);
+        const result = await client.query(query, [eventName, body.ticketCost, body.location, parseInt(id)]);
         
         if (result.rows.length === 0) return { statusCode: 404, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "No encontrado" }) };
         return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows[0]) };

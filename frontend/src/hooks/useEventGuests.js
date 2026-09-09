@@ -28,7 +28,7 @@ export function useEventGuests(eventId, searchTerm = '') {
                 }
                 const data = await response.json();
                 if (!data.error) {
-                    setGuests(data.guests || data.guest || []);
+                    setGuests(Array.isArray(data) ? data : data.guests || data.guest || []);
                 } else {
                     throw new Error(data.message || 'Error fetching guests from API');
                 }
