@@ -40,8 +40,16 @@ export function ExcelPage() {
         worksheet.getRow(1).font = { bold: true };
         worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
 
+        // Ordenar por número de mesa (los que no tienen mesa al final) y luego por nombre
+        const sortedGuests = [...guests].sort((a, b) => {
+            const tableA = a.table ? Number(a.table.number) : Infinity;
+            const tableB = b.table ? Number(b.table.number) : Infinity;
+            if (tableA !== tableB) return tableA - tableB;
+            return (a.name || '').localeCompare(b.name || '', 'es');
+        });
+
         // Añadir filas
-        guests.forEach(guest => {
+        sortedGuests.forEach(guest => {
             worksheet.addRow({
                 boletNumber: guest.boletNumber ? guest.boletNumber : 'N/A',
                 name: guest.name,
