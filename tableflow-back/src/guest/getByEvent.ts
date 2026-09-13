@@ -9,7 +9,18 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         const eventId = event.pathParameters?.eventId;
         if (!eventId) return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "eventId requerido" }) };
         
-        const result = await client.query('SELECT * FROM "Guest" WHERE "eventId" = $1 ORDER BY name ASC;', [parseInt(eventId)]);
+        // Se incluye la mesa asignada como objeto "table" (igual que el antiguo include de Prisma)
+        const query = `
+            SELECT g.*,
+                   CASE WHEN t.id IS NULL THEN NULL
+                        ELSE json_build_object('id', t.id, 'number', t.number, 'numSeats', t."numSeats")
+                   END AS "table"
+            FROM "Guest" g
+            LEFT JOIN "Table" t ON t.id = g."tableId"
+            WHERE g."eventId" = $1
+            ORDER BY g.name ASC;
+        `;
+        const result = await client.query(query, [parseInt(eventId)]);
         return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows) };
     } catch (error) {
         return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "Error interno" }) };

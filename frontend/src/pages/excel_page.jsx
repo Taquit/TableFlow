@@ -8,9 +8,14 @@ import '../css/excel_page.css';
 export function ExcelPage() {
     const { events, loading: eventsLoading } = useEvent();
     const [selectedEventId, setSelectedEventId] = useState('');
-    const { guests, loading: guestsLoading } = useEventGuests(selectedEventId);
+    const { guests, loading: guestsLoading, error: guestsError } = useEventGuests(selectedEventId);
 
     const handleExport = async () => {
+        if (guestsLoading) return;
+        if (guestsError) {
+            alert('No se pudieron cargar los invitados. Intenta de nuevo.');
+            return;
+        }
         if (!selectedEventId || !guests || guests.length === 0) {
             alert('No hay invitados registrados para este evento.');
             return;
@@ -82,12 +87,15 @@ export function ExcelPage() {
 
                         {selectedEventId && (
                             <div className="export-action-group">
-                                <button 
-                                    className="save-btn" 
+                                {guestsError && (
+                                    <p className="loading-text">Error al cargar los invitados: {guestsError}</p>
+                                )}
+                                <button
+                                    className="save-btn"
                                     onClick={handleExport}
-                                    disabled={guestsLoading}
+                                    disabled={guestsLoading || !!guestsError}
                                 >
-                                    {guestsLoading ? 'Cargando datos...' : 'Descargar Excel'}
+                                    {guestsLoading ? 'Cargando datos...' : `Descargar Excel (${guests.length} invitados)`}
                                 </button>
                             </div>
                         )}

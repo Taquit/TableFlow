@@ -10,7 +10,18 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         if (!id) return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "ID requerido" }) };
         
         const body = JSON.parse(event.body || "{}");
-        const query = 'UPDATE "Guest" SET name = COALESCE($1, name), phone = COALESCE($2, phone), "boletNumber" = COALESCE($3, "boletNumber"), paid = COALESCE($4, paid), "amountPaid" = COALESCE($5, "amountPaid"), "tableId" = COALESCE($6, "tableId") WHERE id = $7 RETURNING *;';
+        // Devuelve el invitado actualizado junto con su mesa, para que el front no pierda "guest.table"
+        const query = `
+            WITH updated AS (
+                UPDATE "Guest" SET name = COALESCE($1, name), phone = COALESCE($2, phone), "boletNumber" = COALESCE($3, "boletNumber"), paid = COALESCE($4, paid), "amountPaid" = COALESCE($5, "amountPaid"), "tableId" = COALESCE($6, "tableId") WHERE id = $7 RETURNING *
+            )
+            SELECT u.*,
+                   CASE WHEN t.id IS NULL THEN NULL
+                        ELSE json_build_object('id', t.id, 'number', t.number, 'numSeats', t."numSeats")
+                   END AS "table"
+            FROM updated u
+            LEFT JOIN "Table" t ON t.id = u."tableId";
+        `;
         const result = await client.query(query, [body.name, body.phone, body.boletNumber, body.paid, body.amountPaid, body.tableId, parseInt(id)]);
         
         if (result.rows.length === 0) return { statusCode: 404, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "No encontrado" }) };

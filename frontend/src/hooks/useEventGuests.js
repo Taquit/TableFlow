@@ -11,12 +11,18 @@ export function useEventGuests(eventId, searchTerm = '') {
     useEffect(() => {
         if (!eventId) {
             setGuests([]);
+            setLoading(false);
+            setError(null);
             return;
         }
 
-        const fetchGuests = async () => {
-            setLoading(true);
+        // Marcamos "cargando" desde ya (no hasta que pase el debounce), así nadie
+        // puede usar la lista vacía/antigua mientras la nueva todavía no llega
+        let cancelled = false;
+        setLoading(true);
+        setError(null);
 
+        const fetchGuests = async () => {
             try {
                 let url = `${API_URL}/guests/event/${eventId}`;
                 if (searchTerm.trim()) {
@@ -27,15 +33,19 @@ export function useEventGuests(eventId, searchTerm = '') {
                     throw new Error('Error fetching guests');
                 }
                 const data = await response.json();
+                if (cancelled) return;
                 if (!data.error) {
                     setGuests(Array.isArray(data) ? data : data.guests || data.guest || []);
                 } else {
                     throw new Error(data.message || 'Error fetching guests from API');
                 }
             } catch (error) {
+                if (cancelled) return;
+                setGuests([]);
                 setError(error.message);
             } finally {
-                setLoading(false);
+                // Si el evento/búsqueda cambió, la petición nueva se encarga del loading
+                if (!cancelled) setLoading(false);
             }
         };
 
@@ -43,7 +53,10 @@ export function useEventGuests(eventId, searchTerm = '') {
             fetchGuests();
         }, 300);
 
-        return () => clearTimeout(timeoutId);
+        return () => {
+            cancelled = true;
+            clearTimeout(timeoutId);
+        };
     }, [eventId, searchTerm]);
 
     const updateGuestData = async (guestId, guestData) => {
