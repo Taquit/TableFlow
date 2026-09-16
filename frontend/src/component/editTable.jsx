@@ -6,7 +6,7 @@ import EditGuestModal from './editGuest';
 import { useAuth } from '../hooks/useAuth';
 import '../css/editTable.css';
 
-export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDeleteTable, onUpdateCapacity }) => {
+export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDeleteTable, onUpdateCapacity, onGuestChange }) => {
     const { guests, loading, error, createGuestForTable, updateGuestData, removeGuest } = useGuests(eventId, tableId);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingGuest, setEditingGuest] = useState(null);
@@ -30,6 +30,24 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
         } else {
             return guest.paid ? 'guest-paid-full' : 'guest-unpaid';
         }
+    };
+
+    const handleCreateGuest = async (guestData) => {
+        const res = await createGuestForTable(guestData);
+        if (res.success && onGuestChange) onGuestChange();
+        return res;
+    };
+
+    const handleUpdateGuest = async (guestId, guestData) => {
+        const res = await updateGuestData(guestId, guestData);
+        if (res.success && onGuestChange) onGuestChange();
+        return res;
+    };
+
+    const handleDeleteGuest = async (guestId) => {
+        const res = await removeGuest(guestId);
+        if (res.success && onGuestChange) onGuestChange();
+        return res;
     };
 
     return (
@@ -143,7 +161,7 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
                     eventId={eventId}
                     tableId={tableId}
                     onClose={() => setIsModalOpen(false)}
-                    onAddGuest={createGuestForTable}
+                    onAddGuest={handleCreateGuest}
                 />
             )}
 
@@ -152,8 +170,8 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
                     key={editingGuest.id}
                     guest={editingGuest}
                     onClose={() => setEditingGuest(null)}
-                    onUpdate={updateGuestData}
-                    onDelete={removeGuest}
+                    onUpdate={handleUpdateGuest}
+                    onDelete={handleDeleteGuest}
                 />
             )}
         </aside>

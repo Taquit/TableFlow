@@ -7,33 +7,30 @@ export function useTables(eventId) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
+    const fetchTables = async () => {
         if (!eventId) return;
-        const fetchTables = async () => {
-            setLoading(true);
-            try {
-                const response = await apiCall(`${API_URL}/tables/event/${eventId}`);
-                if (!response.ok) {
-                    throw new Error('Error fetching tables');
-                }
-                const data = await response.json();
-                if (!data.error) {
-                    setTables(data);
-                } else {
-                    throw new Error(data.message || 'Error fetching tables from API');
-                }
-
-
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
+        setLoading(true);
+        try {
+            const response = await apiCall(`${API_URL}/tables/event/${eventId}`);
+            if (!response.ok) {
+                throw new Error('Error fetching tables');
             }
-
-
+            const data = await response.json();
+            if (!data.error) {
+                setTables(data);
+            } else {
+                throw new Error(data.message || 'Error fetching tables from API');
+            }
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
         }
+    };
+
+    useEffect(() => {
         fetchTables();
-    }, [eventId])
+    }, [eventId]);
 
     const deleteTable = async (tableId) => {
         try {
@@ -70,5 +67,5 @@ export function useTables(eventId) {
         }
     };
 
-    return { tables, loading, error, deleteTable, updateTableCapacity };
+    return { tables, loading, error, deleteTable, updateTableCapacity, fetchTables };
 }

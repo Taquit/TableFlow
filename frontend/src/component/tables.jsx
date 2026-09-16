@@ -4,7 +4,7 @@ import { EditTable } from './editTable.jsx'
 
 function Tables({ eventId }) {
     const [selectedTableId, setSelectedTableId] = useState(null);
-    const { tables, loading, error, deleteTable, updateTableCapacity } = useTables(eventId);
+    const { tables, loading, error, deleteTable, updateTableCapacity, fetchTables } = useTables(eventId);
     const [selectedTableNumber, setSelectedTableNumber] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const tablesPerPage = 12;
@@ -111,6 +111,9 @@ function Tables({ eventId }) {
                                     }}
                                     onUpdateCapacity={async (newCapacity, updatedById) => {
                                         return await updateTableCapacity(selectedTableId, newCapacity, updatedById);
+                                    }}
+                                    onGuestChange={() => {
+                                        fetchTables();
                                     }}
                                 />
                             </div>

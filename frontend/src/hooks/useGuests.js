@@ -59,7 +59,7 @@ export function useGuests(eventId, tableId) {
             });
             const data = await response.json();
             if (!data.error) {
-                setGuests(prev => prev.map(g => g.id === guestId ? data : g));
+                setGuests(prev => prev.map(g => g.id === guestId ? data : g).filter(g => g.tableId === parseInt(tableId)));
                 return { success: true, guest: data };
             } else {
                 return { success: false, error: data.message || 'Error al actualizar invitado' };

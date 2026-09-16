@@ -14,7 +14,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         // Devuelve el invitado actualizado junto con su mesa, para que el front no pierda "guest.table"
         const query = `
             WITH updated AS (
-                UPDATE "Guest" SET name = COALESCE($1, name), phone = COALESCE($2, phone), "boletNumber" = COALESCE($3, "boletNumber"), paid = COALESCE($4, paid), "amountPaid" = COALESCE($5, "amountPaid"), "tableId" = COALESCE($6, "tableId"), "isTableManager" = COALESCE($7, "isTableManager"), "updatedById" = COALESCE($8, "updatedById") WHERE id = $9 RETURNING *
+                UPDATE "Guest" SET name = COALESCE($1, name), phone = COALESCE($2, phone), "boletNumber" = $3, paid = COALESCE($4, paid), "amountPaid" = COALESCE($5, "amountPaid"), "tableId" = $6, "isTableManager" = COALESCE($7, "isTableManager"), "updatedById" = COALESCE($8, "updatedById") WHERE id = $9 RETURNING *
             )
             SELECT u.*,
                    CASE WHEN t.id IS NULL THEN NULL

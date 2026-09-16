@@ -13,10 +13,16 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         const eventName = body.name || body.eventName;
         const numTable = body.numTable !== undefined && body.numTable !== '' ? parseInt(body.numTable, 10) : null;
         const numGuest = body.numGuest !== undefined && body.numGuest !== '' ? parseInt(body.numGuest, 10) : null;
+        const ticketCost = body.ticketCost !== undefined && body.ticketCost !== '' ? parseFloat(body.ticketCost) : null;
         const updatedById = body.updatedById !== undefined && body.updatedById !== null ? parseInt(body.updatedById, 10) : null;
 
-        const query = 'UPDATE "Event" SET "eventName" = COALESCE($1, "eventName"), "ticketCost" = COALESCE($2, "ticketCost"), location = COALESCE($3, location), "numTable" = COALESCE($4, "numTable"), "numGuest" = COALESCE($5, "numGuest"), "updatedById" = COALESCE($6, "updatedById"), "updatedAt" = NOW() WHERE id = $7 RETURNING *;';
-        const result = await client.query(query, [eventName, body.ticketCost, body.location, numTable, numGuest, updatedById, parseInt(id)]);
+        let eventDate = null;
+        if (body.date) {
+            eventDate = body.time ? `${body.date}T${body.time}` : body.date;
+        }
+
+        const query = 'UPDATE "Event" SET "eventName" = COALESCE($1, "eventName"), "ticketCost" = COALESCE($2, "ticketCost"), location = COALESCE($3, location), "numTable" = COALESCE($4, "numTable"), "numGuest" = COALESCE($5, "numGuest"), "updatedById" = COALESCE($6, "updatedById"), date = COALESCE($7, date), "updatedAt" = NOW() WHERE id = $8 RETURNING *;';
+        const result = await client.query(query, [eventName, ticketCost, body.location, numTable, numGuest, updatedById, eventDate, parseInt(id)]);
         
         if (result.rows.length === 0) return { statusCode: 404, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "No encontrado" }) };
         return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows[0]) };
