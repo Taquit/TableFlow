@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useGuests } from '../hooks/useGuests';
 import { useEvent } from '../hooks/useEvent';
 import CreatGuest from './creatGuest';
 import EditGuestModal from './editGuest';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import '../css/editTable.css';
 
 export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDeleteTable, onUpdateCapacity }) => {
     const { guests, loading, error, createGuestForTable, updateGuestData, removeGuest } = useGuests(eventId, tableId);
-    const [selectedTableGuests, setSelectedTableGuests] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingGuest, setEditingGuest] = useState(null);
     const { user } = useAuth();
@@ -18,13 +17,10 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
     const currentEvent = events?.find(e => e.id === parseInt(eventId));
     const ticketCost = currentEvent?.ticketCost || 0;
 
+    // El componente se remonta con key={tableId} en tables.jsx al cambiar de mesa,
+    // por lo que este estado local ya nace sincronizado con currentCapacity.
     const [isEditingCapacity, setIsEditingCapacity] = useState(false);
     const [tempCapacity, setTempCapacity] = useState(currentCapacity || 8);
-
-    useEffect(() => {
-        setTempCapacity(currentCapacity || 8);
-        setIsEditingCapacity(false);
-    }, [tableId, currentCapacity]);
 
     const getPaymentClass = (guest) => {
         if (ticketCost > 0) {
@@ -56,7 +52,7 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
                                 <button 
                                     onClick={async () => {
                                         if (onUpdateCapacity) {
-                                            await onUpdateCapacity(tempCapacity);
+                                            await onUpdateCapacity(tempCapacity, user?.id);
                                         }
                                         setIsEditingCapacity(false);
                                     }}
@@ -132,7 +128,10 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
                         style={{ cursor: isAdmin ? 'pointer' : 'default' }}
                         title={isAdmin ? "Haz clic para editar invitado" : ""}
                     >
-                        <span className="guest-name">{g.name}</span>
+                        <span className="guest-name">
+                            {g.name}
+                            {g.isTableManager && <span className="guest-manager-badge" title="Encargado de mesa">Encargado</span>}
+                        </span>
                         {/* Puedes descomentar u ocultar otros datos */}
                         {/* <span>{g.phone}</span> */}
                     </div>
@@ -150,6 +149,7 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
 
             {editingGuest && (
                 <EditGuestModal
+                    key={editingGuest.id}
                     guest={editingGuest}
                     onClose={() => setEditingGuest(null)}
                     onUpdate={updateGuestData}

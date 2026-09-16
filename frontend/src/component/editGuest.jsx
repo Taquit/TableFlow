@@ -1,38 +1,32 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useAuth } from '../hooks/useAuth';
+import { apiCall } from '../utils/apiCall';
 import '../css/editGuest.css';
 
+const API_URL = import.meta.env.BACKEND_API || 'http://localhost:4000/api';
+
 const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
+    const { user } = useAuth();
     const [name, setName] = useState(guest?.name || '');
     const [phone, setPhone] = useState(guest?.phone || '');
     const [boletNumber, setBoletNumber] = useState(guest?.boletNumber || '');
     const [paid, setPaid] = useState(guest?.paid || false);
     const [amountPaid, setAmountPaid] = useState(guest?.amountPaid || 0);
     const [tableId, setTableId] = useState(guest?.tableId || '');
+    const [isTableManager, setIsTableManager] = useState(guest?.isTableManager || false);
     const [tables, setTables] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (guest) {
-            setName(guest.name || '');
-            setPhone(guest.phone || '');
-            setBoletNumber(guest.boletNumber || '');
-            setPaid(guest.paid || false);
-            setAmountPaid(guest.amountPaid || 0);
-            setTableId(guest.tableId || '');
-        }
-    }, [guest]);
-
-    useEffect(() => {
         if (guest?.eventId) {
             const fetchTables = async () => {
                 try {
-                    const res = await fetch(`${import.meta.env.BACKEND_API || 'http://localhost:4000/api'}/tables/event/${guest.eventId}`);
+                    const res = await apiCall(`${API_URL}/tables/event/${guest.eventId}`);
+                    if (!res.ok) return;
                     const data = await res.json();
-                    if (data.success) {
-                        setTables(data.tables || []);
-                    }
+                    setTables(Array.isArray(data) ? data : []);
                 } catch (err) {
                     console.error("Error loading tables:", err);
                 }
@@ -56,7 +50,9 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
             boletNumber: boletNumber ? parseInt(boletNumber) : null,
             paid,
             amountPaid: parseFloat(amountPaid) || 0,
-            tableId: tableId ? parseInt(tableId) : null
+            tableId: tableId ? parseInt(tableId) : null,
+            isTableManager,
+            updatedById: user?.id || null
         };
 
         const result = await onUpdate(guest.id, guestData);
@@ -140,13 +136,23 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
                 </div>
 
                 <div className="edit-guest-checkbox-group">
-                    <input 
-                        type="checkbox" 
+                    <input
+                        type="checkbox"
                         id="guest-paid"
-                        checked={paid} 
-                        onChange={(e) => setPaid(e.target.checked)} 
+                        checked={paid}
+                        onChange={(e) => setPaid(e.target.checked)}
                     />
                     <label htmlFor="guest-paid">¿Ha pagado?</label>
+                </div>
+
+                <div className="edit-guest-checkbox-group">
+                    <input
+                        type="checkbox"
+                        id="guest-table-manager"
+                        checked={isTableManager}
+                        onChange={(e) => setIsTableManager(e.target.checked)}
+                    />
+                    <label htmlFor="guest-table-manager">¿Es encargado de mesa?</label>
                 </div>
 
                 <div className="edit-guest-form-group">

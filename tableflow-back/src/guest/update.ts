@@ -10,10 +10,11 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         if (!id) return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "ID requerido" }) };
         
         const body = JSON.parse(event.body || "{}");
+        const updatedById = body.updatedById !== undefined && body.updatedById !== null ? parseInt(body.updatedById, 10) : null;
         // Devuelve el invitado actualizado junto con su mesa, para que el front no pierda "guest.table"
         const query = `
             WITH updated AS (
-                UPDATE "Guest" SET name = COALESCE($1, name), phone = COALESCE($2, phone), "boletNumber" = COALESCE($3, "boletNumber"), paid = COALESCE($4, paid), "amountPaid" = COALESCE($5, "amountPaid"), "tableId" = COALESCE($6, "tableId") WHERE id = $7 RETURNING *
+                UPDATE "Guest" SET name = COALESCE($1, name), phone = COALESCE($2, phone), "boletNumber" = COALESCE($3, "boletNumber"), paid = COALESCE($4, paid), "amountPaid" = COALESCE($5, "amountPaid"), "tableId" = COALESCE($6, "tableId"), "isTableManager" = COALESCE($7, "isTableManager"), "updatedById" = COALESCE($8, "updatedById") WHERE id = $9 RETURNING *
             )
             SELECT u.*,
                    CASE WHEN t.id IS NULL THEN NULL
@@ -22,7 +23,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
             FROM updated u
             LEFT JOIN "Table" t ON t.id = u."tableId";
         `;
-        const result = await client.query(query, [body.name, body.phone, body.boletNumber, body.paid, body.amountPaid, body.tableId, parseInt(id)]);
+        const result = await client.query(query, [body.name, body.phone, body.boletNumber, body.paid, body.amountPaid, body.tableId, body.isTableManager, updatedById, parseInt(id)]);
         
         if (result.rows.length === 0) return { statusCode: 404, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "No encontrado" }) };
         return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows[0]) };

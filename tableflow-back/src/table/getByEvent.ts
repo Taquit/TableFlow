@@ -10,8 +10,13 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         if (!eventId) return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "eventId requerido" }) };
         
         const query = `
-            SELECT t.*, 
-                   COUNT(g.id) as guests_count
+            SELECT t.*,
+                   COUNT(g.id) as guests_count,
+                   (
+                       SELECT m.name FROM "Guest" m
+                       WHERE m."tableId" = t.id AND m."isTableManager" = true
+                       ORDER BY m.id ASC LIMIT 1
+                   ) as "managerName"
             FROM "Table" t
             LEFT JOIN "Guest" g ON t.id = g."tableId"
             WHERE t."eventId" = $1

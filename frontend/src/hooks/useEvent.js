@@ -45,7 +45,7 @@ export function useEvent(){
             } else {
                 return { success: false, error: data.error };
             }
-        } catch (err) {
+        } catch {
             return { success: false, error: 'Error de red al conectar con el servidor.' };
         }
     };
@@ -65,7 +65,7 @@ export function useEvent(){
             } else {
                 return { success: false, error: data.error };
             }
-        } catch (err) {
+        } catch {
             return { success: false, error: 'Error de red al conectar con el servidor.' };
         }
     };
@@ -83,7 +83,7 @@ export function useEvent(){
             } else {
                 return { success: false, error: data.error };
             }
-        } catch (err) {
+        } catch {
             return { success: false, error: 'Error de red al conectar con el servidor.' };
         }
     };

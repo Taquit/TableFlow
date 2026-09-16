@@ -44,19 +44,26 @@ function Tables({ eventId }) {
                                 <div className="table-cap">Mostrando {tables.length} mesas disponibles</div>
                             </div>
                             <div className="tables-grid-4cols">
-                                {currentTables.map(table => (
-                                    <div
-                                        key={table.id}
-                                        className={`table-widget ${selectedTableId === table.id ? 'active' : ''}`}
-                                        onClick={() => { setSelectedTableId(table.id); setSelectedTableNumber(table.number) }}
-                                    >
-                                        <div className="table-circle">#{table.number}</div>
-                                        <div className="table-cap">Mesa {table.number}</div>
-                                        <div className="table-cap tables-capacity-text">
-                                            Cap: {table._count?.guests || 0} / {table.numSeats} pers.
+                                {currentTables.map(table => {
+                                    const guestsCount = table._count?.guests || 0;
+                                    const isFull = table.numSeats > 0 && guestsCount >= table.numSeats;
+                                    return (
+                                        <div
+                                            key={table.id}
+                                            className={`table-widget ${selectedTableId === table.id ? 'active' : ''} ${isFull ? 'full' : ''}`}
+                                            onClick={() => { setSelectedTableId(table.id); setSelectedTableNumber(table.number) }}
+                                        >
+                                            <div className="table-circle">#{table.number}</div>
+                                            <div className="table-cap">Mesa {table.number}</div>
+                                            <div className="table-manager-name" title={table.managerName || 'Sin encargado asignado'}>
+                                                {table.managerName ? `👤 ${table.managerName}` : 'Sin encargado'}
+                                            </div>
+                                            <div className="table-cap tables-capacity-text">
+                                                Cap: {guestsCount} / {table.numSeats} pers.
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                             {totalPages > 1 && (
                                 <div className="pagination-container">
@@ -88,8 +95,9 @@ function Tables({ eventId }) {
                         </div>
                         {selectedTableId && (
                             <div className="tables-sidebar">
-                                <EditTable 
-                                    tableId={selectedTableId} 
+                                <EditTable
+                                    key={selectedTableId}
+                                    tableId={selectedTableId}
                                     eventId={eventId} 
                                     tableNumber={selectedTableNumber} 
                                     currentCapacity={tables.find(t => t.id === selectedTableId)?.numSeats}
@@ -101,8 +109,8 @@ function Tables({ eventId }) {
                                         }
                                         return res;
                                     }}
-                                    onUpdateCapacity={async (newCapacity) => {
-                                        return await updateTableCapacity(selectedTableId, newCapacity);
+                                    onUpdateCapacity={async (newCapacity, updatedById) => {
+                                        return await updateTableCapacity(selectedTableId, newCapacity, updatedById);
                                     }}
                                 />
                             </div>

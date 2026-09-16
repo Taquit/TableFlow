@@ -9,22 +9,21 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         const body = JSON.parse(event.body || "{}");
         const date = body.date || new Date().toISOString();
         const eventName = body.name || body.eventName;
-        
-        const query = 'INSERT INTO "Event" ("eventName", date, "ticketCost", location, "updatedAt") VALUES ($1, $2, $3, $4, NOW()) RETURNING *;';
-        const result = await client.query(query, [eventName, date, body.ticketCost || 0, body.location]);
-        
+        const numTable = body.numTable ? parseInt(body.numTable, 10) : 0;
+        const numGuest = body.numGuest ? parseInt(body.numGuest, 10) : 0;
+        const updatedById = body.updatedById ? parseInt(body.updatedById, 10) : null;
+
+        const query = 'INSERT INTO "Event" ("eventName", date, "ticketCost", location, "numTable", "numGuest", "updatedById", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, NOW()) RETURNING *;';
+        const result = await client.query(query, [eventName, date, body.ticketCost || 0, body.location, numTable, numGuest, updatedById]);
+
         const newEvent = result.rows[0];
-        
+
         // Generate tables if numTable is provided
-        if (body.numTable) {
-            const numTables = parseInt(body.numTable, 10);
-            if (numTables > 0) {
-                const totalGuests = body.numGuest ? parseInt(body.numGuest, 10) : 0;
-                const numSeats = totalGuests > 0 ? Math.ceil(totalGuests / numTables) : 8;
-                
-                for (let i = 1; i <= numTables; i++) {
-                    await client.query('INSERT INTO "Table" (number, "numSeats", "eventId") VALUES ($1, $2, $3)', [i, numSeats, newEvent.id]);
-                }
+        if (numTable > 0) {
+            const numSeats = numGuest > 0 ? Math.ceil(numGuest / numTable) : 8;
+
+            for (let i = 1; i <= numTable; i++) {
+                await client.query('INSERT INTO "Table" (number, "numSeats", "eventId", "updatedById") VALUES ($1, $2, $3, $4)', [i, numSeats, newEvent.id, updatedById]);
             }
         }
         

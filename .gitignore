@@ -24,3 +24,5 @@ yarn-error.log*
 
 # sst
 .sst
+
+MODELS.md

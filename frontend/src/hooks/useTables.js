@@ -47,16 +47,16 @@ export function useTables(eventId) {
             } else {
                 return { success: false, error: data.error };
             }
-        } catch (error) {
+        } catch {
             return { success: false, error: 'Error de red al eliminar la mesa' };
         }
     };
 
-    const updateTableCapacity = async (tableId, numSeats) => {
+    const updateTableCapacity = async (tableId, numSeats, updatedById) => {
         try {
             const response = await apiCall(`${API_URL}/tables/${tableId}`, {
                 method: 'PUT',
-                body: JSON.stringify({ numSeats: parseInt(numSeats) })
+                body: JSON.stringify({ numSeats: parseInt(numSeats), updatedById: updatedById || null })
             });
             const data = await response.json();
             if (!data.error) {
@@ -65,7 +65,7 @@ export function useTables(eventId) {
             } else {
                 return { success: false, error: data.error };
             }
-        } catch (error) {
+        } catch {
             return { success: false, error: 'Error de red al actualizar la mesa' };
         }
     };

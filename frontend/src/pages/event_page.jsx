@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import CreateEvent from '../component/createEvent';
 import EditEvent from '../component/editEvent';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 export function EventPage() {
     const [action, setAction] = useState(null); // 'create' or 'edit'

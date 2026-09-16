@@ -45,7 +45,7 @@ export function useGuests(eventId, tableId) {
             } else {
                 return { success: false, error: data.message || 'Error al crear invitado' };
             }
-        } catch (err) {
+        } catch {
             return { success: false, error: 'Error de red al conectar con el servidor.' };
         }
     };
@@ -64,7 +64,7 @@ export function useGuests(eventId, tableId) {
             } else {
                 return { success: false, error: data.message || 'Error al actualizar invitado' };
             }
-        } catch (err) {
+        } catch {
             return { success: false, error: 'Error de red al conectar con el servidor.' };
         }
     };
@@ -81,7 +81,7 @@ export function useGuests(eventId, tableId) {
             } else {
                 return { success: false, error: data.message || 'Error al eliminar invitado' };
             }
-        } catch (err) {
+        } catch {
             return { success: false, error: 'Error de red.' };
         }
     };

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useEvent } from '../hooks/useEvent';
 import { useEventGuests } from '../hooks/useEventGuests';
 import EditGuestModal from '../component/editGuest';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import '../css/guest_page.css';
 
 function GuestsPage() {
@@ -85,11 +85,11 @@ function GuestsPage() {
                                 <div
                                     className="guest-card"
                                     key={guest.id}
-                                    onClick={() => user && setEditingGuest(guest)}
-                                    style={{ cursor: user ? 'pointer' : 'default' }}
-                                    title={user ? "Haz clic para editar" : ""}
+                                    onClick={() => isAdmin && setEditingGuest(guest)}
+                                    style={{ cursor: isAdmin ? 'pointer' : 'default' }}
+                                    title={isAdmin ? "Haz clic para editar" : ""}
                                 >
-                                    <h3>{guest.name}</h3>
+                                    <h3>{guest.name}{guest.isTableManager && <span className="guest-manager-badge" title="Encargado de mesa">Encargado</span>}</h3>
                                     {guest.phone && <p>📞 {guest.phone}</p>}
                                     <p>🪑 Mesa: {guest.table ? `#${guest.table.number}` : 'Sin asignar'} | 🎫 Boleto: {guest.boletNumber ? `#${guest.boletNumber}` : 'N/A'}</p>
 
@@ -116,6 +116,7 @@ function GuestsPage() {
 
             {editingGuest && (
                 <EditGuestModal
+                    key={editingGuest.id}
                     guest={editingGuest}
                     onClose={() => setEditingGuest(null)}
                     onUpdate={updateGuestData}

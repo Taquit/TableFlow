@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEvent } from '../hooks/useEvent';
+import { useAuth } from '../hooks/useAuth';
 import '../css/createEvent.css';
 
 export function CreateEvent() {
@@ -15,12 +16,13 @@ export function CreateEvent() {
 
     const navigate = useNavigate();
     const { createNewEvent } = useEvent();
+    const { user } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus({ type: 'loading', message: 'Creando evento...' });
 
-        const result = await createNewEvent({ name, date, time, location, numTable, numGuest, ticketCost });
+        const result = await createNewEvent({ name, date, time, location, numTable, numGuest, ticketCost, updatedById: user?.id || null });
 
         if (result.success) {
             setStatus({ type: 'success', message: '¡Evento creado con éxito!' });

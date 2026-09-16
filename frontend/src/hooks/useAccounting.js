@@ -9,10 +9,7 @@ export const useAccounting = (eventId) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!eventId) {
-            setAccountingData(null);
-            return;
-        }
+        if (!eventId) return;
 
         const fetchAccounting = async () => {
             setLoading(true);
@@ -42,5 +39,5 @@ export const useAccounting = (eventId) => {
         fetchAccounting();
     }, [eventId]);
 
-    return { accountingData, loading, error };
+    return { accountingData: eventId ? accountingData : null, loading, error };
 };

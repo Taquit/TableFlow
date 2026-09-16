@@ -7,8 +7,9 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
     try {
         await client.connect();
         const body = JSON.parse(event.body || "{}");
-        const query = 'INSERT INTO "Guest" (name, phone, "boletNumber", paid, "amountPaid", "eventId", "tableId") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;';
-        const result = await client.query(query, [body.name, body.phone, body.boletNumber, body.paid || false, body.amountPaid || 0.0, body.eventId, body.tableId]);
+        const updatedById = body.updatedById ? parseInt(body.updatedById, 10) : null;
+        const query = 'INSERT INTO "Guest" (name, phone, "boletNumber", paid, "amountPaid", "eventId", "tableId", "isTableManager", "updatedById") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;';
+        const result = await client.query(query, [body.name, body.phone, body.boletNumber, body.paid || false, body.amountPaid || 0.0, body.eventId, body.tableId, body.isTableManager || false, updatedById]);
         
         return { statusCode: 201, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows[0]) };
     } catch (error) {

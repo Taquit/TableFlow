@@ -99,6 +99,10 @@
   box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
 }
 
+.table-widget.full .table-circle {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
 .table-circle {
   width: 54px;
   height: 54px;
@@ -122,6 +126,15 @@
 .table-cap {
   font-size: 12px;
   color: var(--text-secondary);
+}
+
+.table-manager-name {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .guest-editor {

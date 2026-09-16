@@ -10,6 +10,7 @@ export function useEventGuests(eventId, searchTerm = '') {
 
     useEffect(() => {
         if (!eventId) {
+            // oxlint-disable-next-line react/set-state-in-effect -- intentional reset when the caller clears eventId
             setGuests([]);
             setLoading(false);
             setError(null);
@@ -73,7 +74,7 @@ export function useEventGuests(eventId, searchTerm = '') {
             } else {
                 return { success: false, error: data.message || 'Error al actualizar invitado' };
             }
-        } catch (err) {
+        } catch {
             return { success: false, error: 'Error de red al conectar con el servidor.' };
         }
     };
@@ -90,7 +91,7 @@ export function useEventGuests(eventId, searchTerm = '') {
             } else {
                 return { success: false, error: data.message || 'Error al eliminar invitado' };
             }
-        } catch (err) {
+        } catch {
             return { success: false, error: 'Error de red.' };
         }
     };

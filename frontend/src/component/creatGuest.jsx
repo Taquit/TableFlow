@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useAuth } from '../hooks/useAuth';
 import '../css/creatGuest.css';
 
 export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
+    const { user } = useAuth();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [boletNumber, setBoletNumber] = useState('');
     const [paid, setPaid] = useState(false);
     const [amountPaid, setAmountPaid] = useState('');
+    const [isTableManager, setIsTableManager] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -23,7 +26,9 @@ export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
             eventId,
             tableId,
             paid,
-            amountPaid: amountPaid ? parseFloat(amountPaid) : 0
+            amountPaid: amountPaid ? parseFloat(amountPaid) : 0,
+            isTableManager,
+            updatedById: user?.id || null
         });
 
         setLoading(false);
@@ -86,6 +91,16 @@ export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
                             onChange={(e) => setPaid(e.target.checked)}
                         />
                         <label className="creat-guest-label" htmlFor="paid-checkbox">¿Ha pagado?</label>
+                    </div>
+
+                    <div className="creat-guest-checkbox-group">
+                        <input
+                            type="checkbox"
+                            id="table-manager-checkbox"
+                            checked={isTableManager}
+                            onChange={(e) => setIsTableManager(e.target.checked)}
+                        />
+                        <label className="creat-guest-label" htmlFor="table-manager-checkbox">¿Es encargado de mesa?</label>
                     </div>
 
                     {paid && (

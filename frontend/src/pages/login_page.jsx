@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import '../css/login.css';
 
 const API_URL = import.meta.env.BACKEND_API || 'http://localhost:4000/api';
@@ -34,7 +34,7 @@ const LoginPage = () => {
             } else {
                 setError(data.message || 'Login failed');
             }
-        } catch (err) {
+        } catch {
             setError('Network error, please try again later');
         } finally {
             setLoading(false);

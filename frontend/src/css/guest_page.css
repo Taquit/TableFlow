@@ -150,6 +150,21 @@
     letter-spacing: -0.5px;
 }
 
+.guest-manager-badge {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
 .guest-card p {
     margin: 8px 0;
     color: #a0a0b0;
