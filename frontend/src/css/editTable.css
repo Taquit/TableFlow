@@ -1,38 +1,42 @@
 .edit-table-panel {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--dark-surface, #ffffff);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--dark-border, rgba(0, 0, 0, 0.1));
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
     gap: 16px;
-    color: var(--text, #ffffff);
+    color: var(--text-primary, #1e293b);
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .edit-table-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--dark-border, rgba(0, 0, 0, 0.08));
     padding-bottom: 12px;
     margin-bottom: 12px;
 }
 
 .edit-table-title {
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.3rem;
+    font-weight: 700;
     margin: 0 0 4px 0;
+    color: var(--text-primary, #1e293b);
 }
 
 .edit-table-desc {
     font-size: 0.85rem;
-    color: #a0a0b0;
-    margin: 0;
+    color: var(--text-secondary, #64748b);
+    margin: 0 0 6px 0;
+    line-height: 1.4;
 }
 
 .edit-table-error {
     font-size: 0.85rem;
-    color: #ff6b6b;
+    color: #ef4444;
     margin: 0;
 }
 
@@ -41,15 +45,17 @@
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
-    background: linear-gradient(135deg, #b519ce 0%, #8e14a1 100%);
+    background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
     color: white;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.25);
 }
 
 .edit-table-add-btn:hover {
-    opacity: 0.9;
+    opacity: 0.95;
+    transform: translateY(-1px);
 }
 
 .guests-list-container {
@@ -67,22 +73,22 @@
 }
 
 .guests-list-container::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.04);
     border-radius: 4px;
 }
 
 .guests-list-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.15);
     border-radius: 4px;
 }
 
 .guests-list-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.25);
 }
 
 .guest-item {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #f8fafc;
+    border: 1px solid var(--dark-border, rgba(0, 0, 0, 0.08));
     border-radius: 8px;
     padding: 12px 16px;
     display: flex;
@@ -90,72 +96,78 @@
     align-items: center;
     transition: all 0.2s ease;
     cursor: pointer;
+    color: var(--text-primary, #1e293b);
 }
 
 .guest-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: #f1f5f9;
+    border-color: rgba(168, 85, 247, 0.3);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .guest-name {
     font-weight: 500;
     font-size: 0.95rem;
+    color: var(--text-primary, #1e293b);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 .guest-manager-badge {
     display: inline-block;
-    margin-left: 8px;
     padding: 2px 8px;
     border-radius: 20px;
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.15);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.1);
+    border: 1px solid rgba(2, 132, 199, 0.25);
 }
 
 .empty-guests {
     text-align: center;
     padding: 24px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-secondary, #64748b);
     font-size: 0.9rem;
-    background: rgba(0, 0, 0, 0.1);
+    background: #f8fafc;
     border-radius: 8px;
-    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border: 1px dashed var(--dark-border, rgba(0, 0, 0, 0.15));
 }
 
 .guest-item.guest-paid-full {
-    border-left: 4px solid #4ade80;
-    background: rgba(46, 204, 113, 0.1);
+    border-left: 4px solid #10b981;
+    background: rgba(16, 185, 129, 0.08);
 }
 
 .guest-item.guest-paid-partial {
-    border-left: 4px solid #f39c12;
-    background: rgba(243, 156, 18, 0.1);
+    border-left: 4px solid #f59e0b;
+    background: rgba(245, 158, 11, 0.08);
 }
 
 .guest-item.guest-unpaid {
-    border-left: 4px solid #f87171;
-    background: rgba(231, 76, 60, 0.1);
+    border-left: 4px solid #ef4444;
+    background: rgba(239, 68, 68, 0.08);
 }
 
 .table-audit-header {
     font-size: 0.8rem;
-    color: #94a3b8;
-    background: rgba(148, 163, 184, 0.1);
+    color: var(--text-secondary, #64748b);
+    background: rgba(100, 116, 139, 0.08);
     padding: 4px 8px;
     border-radius: 6px;
     display: inline-block;
     margin-bottom: 8px;
-    border: 1px solid rgba(148, 163, 184, 0.2);
+    border: 1px solid var(--dark-border, rgba(0, 0, 0, 0.08));
 }
 
 .guest-audit-info {
     font-size: 0.75rem;
-    color: #94a3b8;
+    color: var(--text-secondary, #64748b);
     margin-left: auto;
     padding-left: 10px;
 }
@@ -172,16 +184,16 @@
 
 .capacity-label {
     font-size: 14px;
-    color: #cbd5e1;
+    color: var(--text-secondary, #64748b);
 }
 
 .capacity-input {
     width: 60px;
-    padding: 4px;
-    border-radius: 4px;
-    border: 1px solid #475569;
-    background: #1e293b;
-    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--dark-border, #cbd5e1);
+    background: #ffffff;
+    color: var(--text-primary, #1e293b);
 }
 
 .capacity-save-btn {
@@ -192,6 +204,7 @@
     padding: 4px 8px;
     cursor: pointer;
     line-height: 1;
+    font-weight: 500;
 }
 
 .capacity-cancel-btn {
@@ -202,6 +215,7 @@
     padding: 4px 8px;
     cursor: pointer;
     line-height: 1;
+    font-weight: 500;
 }
 
 .capacity-view-row {
@@ -213,18 +227,36 @@
 
 .capacity-view-text {
     margin: 0;
+    color: var(--text-secondary, #64748b);
 }
 
 .capacity-edit-trigger {
     background: transparent;
     border: none;
-    color: #38bdf8;
+    color: #9333ea;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 600;
     padding: 0;
+}
+
+.capacity-edit-trigger:hover {
+    text-decoration: underline;
 }
 
 .edit-table-delete-btn {
     background: #ef4444;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
     margin-top: 10px;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+.edit-table-delete-btn:hover {
+    background: #dc2626;
 }

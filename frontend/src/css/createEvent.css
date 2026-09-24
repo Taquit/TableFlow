@@ -137,3 +137,16 @@
 .button-group .create-event-submit-btn {
     flex: 1;
 }
+
+.edit-event-form-inner {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 30px;
+}
+
+.edit-event-title-center {
+    text-align: center;
+}
+
+.edit-event-form-active {
+    margin-bottom: 30px;
+}

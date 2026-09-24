@@ -11,7 +11,7 @@ export function AccountingView({ eventId }) {
         return (
             <div className="accounting-container">
                 <div className="accounting-header">
-                    <h3 style={{ color: '#1f2937' }}>Cargando datos contables...</h3>
+                    <h3 className="accounting-loading-title">Cargando datos contables...</h3>
                 </div>
             </div>
         );
@@ -21,7 +21,7 @@ export function AccountingView({ eventId }) {
         return (
             <div className="accounting-container">
                 <div className="accounting-header">
-                    <h3 style={{ color: '#ef4444' }}>Error: {error}</h3>
+                    <h3 className="accounting-error-title">Error: {error}</h3>
                 </div>
             </div>
         );
@@ -31,7 +31,7 @@ export function AccountingView({ eventId }) {
         return (
             <div className="accounting-container">
                 <div className="accounting-header">
-                    <h3 style={{ color: '#1f2937' }}>No hay datos contables disponibles.</h3>
+                    <h3 className="accounting-empty-title">No hay datos contables disponibles.</h3>
                 </div>
             </div>
         );
@@ -55,20 +55,19 @@ export function AccountingView({ eventId }) {
                 </div>
             </div>
 
-            <h3 style={{ marginBottom: '1.5rem', color: '#1f2937' }}>
+            <h3 className="accounting-section-title">
                 Desglose por Mesas
             </h3>
 
             {accountingData.tablesData.length === 0 ? (
-                <p style={{ color: '#4b5563' }}>No hay mesas en este evento.</p>
+                <p className="accounting-empty-tables">No hay mesas en este evento.</p>
             ) : (
                 <>
                     <div className="accounting-tables-grid">
-                        {currentTables.map((table, index) => (
+                        {currentTables.map((table) => (
                             <div 
                                 className="accounting-table-card" 
                                 key={table.id}
-                                style={{ animationDelay: `${index * 0.1}s` }}
                             >
                                 <div className="accounting-table-header">
                                     <span className="accounting-table-title">Mesa #{table.number}</span>

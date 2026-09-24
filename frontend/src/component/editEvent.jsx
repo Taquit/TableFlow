@@ -18,7 +18,7 @@ function EditEventForm({ eventObj, status, onSubmit, onDelete }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="create-event-form" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '30px' }}>
+        <form onSubmit={handleSubmit} className="create-event-form edit-event-form-inner">
             <div className="create-event-group">
                 <label className="form-label">Nombre del evento *</label>
                 <input
@@ -170,7 +170,7 @@ export function EditEvent() {
         return (
             <section className="create-event-section">
                 <div className="create-event-card">
-                    <h3 className="create-event-title" style={{textAlign: 'center'}}>Cargando eventos...</h3>
+                    <h3 className="create-event-title edit-event-title-center">Cargando eventos...</h3>
                 </div>
             </section>
         );
@@ -180,7 +180,7 @@ export function EditEvent() {
         return (
             <section className="create-event-section">
                 <div className="create-event-card">
-                    <h3 className="create-event-title" style={{textAlign: 'center'}}>No hay eventos para editar</h3>
+                    <h3 className="create-event-title edit-event-title-center">No hay eventos para editar</h3>
                 </div>
             </section>
         );
@@ -195,7 +195,7 @@ export function EditEvent() {
                     <h3 className="create-event-title">Editar Evento</h3>
                 </div>
 
-                <div className="create-event-form" style={{ marginBottom: selectedEventId ? '30px' : '0' }}>
+                <div className={`create-event-form ${selectedEventId ? 'edit-event-form-active' : ''}`}>
                     <div className="create-event-group">
                         <label className="form-label">Selecciona el evento a editar</label>
                         <select

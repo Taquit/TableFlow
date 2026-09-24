@@ -118,7 +118,7 @@ export function CreatGuest({ eventId, tableId, onClose, onAddGuest }) {
                     )}
 
                     {error && (
-                        <div style={{ color: '#ffb3b3', fontSize: '0.9rem', textAlign: 'center' }}>
+                        <div className="creat-guest-error">
                             {error}
                         </div>
                     )}

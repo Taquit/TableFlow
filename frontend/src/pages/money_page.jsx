@@ -1,25 +1,26 @@
 import { useState } from 'react';
 import { useEvent } from '../hooks/useEvent';
 import AccountingView from '../component/accountingView';
+import '../css/accounting.css';
 
 export function MoneyPage() {
     const { events, loading } = useEvent();
     const [selectedEventId, setSelectedEventId] = useState('');
 
     return (
-        <div className='main' style={{ minHeight: '80vh' }}>
+        <div className='main money-page-main'>
             <h1>Contaduría</h1>
-            <p style={{ color: 'rgba(0, 0, 0, 1)', marginBottom: '30px' }}>
+            <p className="money-page-subtitle">
                 Revisa el estado de cuenta y recaudación de tus eventos
             </p>
 
-            <section className="create-event-section" style={{ padding: '0', maxWidth: '800px', margin: '0 auto 2rem auto' }}>
-                <div className="create-event-card" style={{ marginBottom: '0' }}>
+            <section className="create-event-section money-event-section">
+                <div className="create-event-card money-event-card">
                     <div className="create-event-form">
                         <div className="create-event-group">
                             <label className="form-label">Selecciona el evento para ver su contaduría</label>
                             {loading ? (
-                                <p style={{ color: 'white' }}>Cargando eventos...</p>
+                                <p className="money-loading-text">Cargando eventos...</p>
                             ) : (
                                 <select 
                                     className="custom-input" 

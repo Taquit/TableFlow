@@ -2,6 +2,7 @@ import { useState } from 'react';
 import CreateEvent from '../component/createEvent';
 import EditEvent from '../component/editEvent';
 import { useAuth } from '../hooks/useAuth';
+import '../css/event_page.css';
 
 export function EventPage() {
     const [action, setAction] = useState(null); // 'create' or 'edit'
@@ -12,23 +13,21 @@ export function EventPage() {
     return (
         <div className='main'>
             <h1>Gestión de eventos</h1>
-            <p style={{ color: 'rgba(0, 0, 0, 1)', marginBottom: '30px' }}>
+            <p className="event-page-subtitle">
                 {isAdmin ? 'Crea un nuevo evento o edita uno existente' : 'Visualiza los eventos existentes'}
             </p>
 
             {isAdmin && (
-                <div className='btn-container' style={{ marginBottom: '40px' }}>
+                <div className='btn-container event-page-btn-container'>
                     <button
-                        className='btn-primary'
+                        className={`btn-primary ${action === 'create' ? 'event-btn-active' : ''}`}
                         onClick={() => setAction('create')}
-                        style={action === 'create' ? { background: 'rgba(255,255,255,0.2)' } : {}}
                     >
                         Crear evento
                     </button>
                     <button
-                        className='btn-primary'
+                        className={`btn-primary ${action === 'edit' ? 'event-btn-active' : ''}`}
                         onClick={() => setAction('edit')}
-                        style={action === 'edit' ? { background: 'rgba(255,255,255,0.2)' } : {}}
                     >
                         Editar Evento
                     </button>

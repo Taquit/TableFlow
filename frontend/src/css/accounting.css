@@ -162,3 +162,55 @@
         padding: 1rem;
     }
 }
+
+/* Classes for money_page.jsx */
+.money-page-main {
+    min-height: 80vh;
+}
+
+.money-page-subtitle {
+    color: var(--text-primary, #1e293b);
+    margin-bottom: 30px;
+}
+
+.money-event-section {
+    padding: 0;
+    max-width: 800px;
+    margin: 0 auto 2rem auto;
+}
+
+.money-event-card {
+    margin-bottom: 0;
+}
+
+.money-loading-text {
+    color: var(--text-secondary, #64748b);
+}
+
+/* Classes for accountingView.jsx */
+.accounting-loading-title,
+.accounting-empty-title {
+    color: #1f2937;
+}
+
+.accounting-error-title {
+    color: #ef4444;
+}
+
+.accounting-section-title {
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+}
+
+.accounting-empty-tables {
+    color: #4b5563;
+}
+
+.accounting-table-card:nth-child(1) { animation-delay: 0.1s; }
+.accounting-table-card:nth-child(2) { animation-delay: 0.2s; }
+.accounting-table-card:nth-child(3) { animation-delay: 0.3s; }
+.accounting-table-card:nth-child(4) { animation-delay: 0.4s; }
+.accounting-table-card:nth-child(5) { animation-delay: 0.5s; }
+.accounting-table-card:nth-child(6) { animation-delay: 0.6s; }
+.accounting-table-card:nth-child(7) { animation-delay: 0.7s; }
+.accounting-table-card:nth-child(8) { animation-delay: 0.8s; }

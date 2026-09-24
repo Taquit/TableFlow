@@ -91,3 +91,17 @@
         width: 100%;
     }
 }
+
+.event-page-subtitle {
+    color: var(--text-primary, #1e293b);
+    margin-bottom: 30px;
+}
+
+.event-page-btn-container {
+    margin-bottom: 40px;
+}
+
+.btn-primary.event-btn-active {
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6), 0 0 20px rgba(168, 85, 247, 0.6);
+    filter: brightness(1.15);
+}
