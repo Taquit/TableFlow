@@ -1,13 +1,23 @@
-import { useState } from 'react'
-import { useTables } from '../hooks/useTables.js'
-import { EditTable } from './editTable.jsx'
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useTables } from '../hooks/useTables.js';
+import { useAuth } from '../hooks/useAuth.js';
+import { EditTable } from './editTable.jsx';
 
 function Tables({ eventId }) {
     const [selectedTableId, setSelectedTableId] = useState(null);
-    const { tables, loading, error, deleteTable, updateTableCapacity, fetchTables } = useTables(eventId);
+    const { tables, loading, error, createNewTable, deleteTable, updateTableCapacity, fetchTables } = useTables(eventId);
     const [selectedTableNumber, setSelectedTableNumber] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isAddTableOpen, setIsAddTableOpen] = useState(false);
+    const [newTableNumber, setNewTableNumber] = useState('');
+    const [newTableSeats, setNewTableSeats] = useState(8);
+    const [addTableLoading, setAddTableLoading] = useState(false);
+    const [addTableError, setAddTableError] = useState('');
     const tablesPerPage = 12;
+
+    const { user } = useAuth();
+    const isAdmin = user && user.role === 'ADMIN';
 
     if (loading) {
         return <p>Cargando mesas...</p>;
@@ -16,7 +26,71 @@ function Tables({ eventId }) {
         return <p>Error al cargar mesas: {error}</p>;
     }
     if (tables.length === 0) {
-        return <p>No hay mesas disponibles para este evento.</p>;
+        return (
+            <div className="demo-section">
+                <p>No hay mesas disponibles para este evento.</p>
+                {isAdmin && (
+                    <button
+                        className="add-table-btn"
+                        onClick={() => {
+                            setNewTableNumber(1);
+                            setNewTableSeats(8);
+                            setAddTableError('');
+                            setIsAddTableOpen(true);
+                        }}
+                    >
+                        + Añadir Primera Mesa
+                    </button>
+                )}
+                {isAddTableOpen && createPortal(
+                    <div className="add-table-modal-overlay">
+                        <div className="add-table-modal">
+                            <h3 className="add-table-title">Añadir Mesa</h3>
+                            {addTableError && <p className="edit-table-error">{addTableError}</p>}
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                setAddTableLoading(true);
+                                const res = await createNewTable({
+                                    number: parseInt(newTableNumber, 10),
+                                    numSeats: parseInt(newTableSeats, 10),
+                                    eventId: parseInt(eventId, 10),
+                                    updatedById: user?.id || null
+                                });
+                                setAddTableLoading(false);
+                                if (res.success) setIsAddTableOpen(false);
+                                else setAddTableError(res.error);
+                            }} className="add-table-form">
+                                <label className="form-label">Número de mesa:</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    className="add-table-input"
+                                    value={newTableNumber}
+                                    onChange={(e) => setNewTableNumber(e.target.value)}
+                                    required
+                                />
+                                <label className="form-label">Capacidad de asientos:</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    className="add-table-input"
+                                    value={newTableSeats}
+                                    onChange={(e) => setNewTableSeats(e.target.value)}
+                                    required
+                                />
+                                <div className="add-table-actions">
+                                    <button type="button" className="btn-cancel" onClick={() => setIsAddTableOpen(false)}>Cancelar</button>
+                                    <button type="submit" className="add-table-btn" disabled={addTableLoading}>
+                                        {addTableLoading ? 'Guardando...' : 'Crear Mesa'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>,
+                    document.body
+                )}
+            </div>
+        );
     }
 
     const totalPages = Math.ceil(tables.length / tablesPerPage);
@@ -27,6 +101,34 @@ function Tables({ eventId }) {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    const handleOpenAddTable = () => {
+        const maxNumber = tables.reduce((max, t) => Math.max(max, t.number || 0), 0);
+        setNewTableNumber(maxNumber + 1);
+        setNewTableSeats(8);
+        setAddTableError('');
+        setIsAddTableOpen(true);
+    };
+
+    const handleAddTableSubmit = async (e) => {
+        e.preventDefault();
+        setAddTableLoading(true);
+        setAddTableError('');
+        const res = await createNewTable({
+            number: parseInt(newTableNumber, 10),
+            numSeats: parseInt(newTableSeats, 10),
+            eventId: parseInt(eventId, 10),
+            updatedById: user?.id || null
+        });
+        setAddTableLoading(false);
+        if (res.success) {
+            setIsAddTableOpen(false);
+        } else {
+            setAddTableError(res.error || 'Error al crear la mesa');
+        }
+    };
+
+    const selectedTable = tables.find(t => t.id === selectedTableId);
 
     return (
         <>
@@ -39,9 +141,16 @@ function Tables({ eventId }) {
                     </div>
                     <div className="tables-layout-container">
                         <div className={`demo-card glass-effect tables-main-card ${selectedTableId ? 'selected' : 'unselected'}`}>
-                            <div className="demo-dashboard-header">
-                                <h3>Plano de Distribución</h3>
-                                <div className="table-cap">Mostrando {tables.length} mesas disponibles</div>
+                            <div className="demo-dashboard-header tables-header-actions">
+                                <div>
+                                    <h3>Plano de Distribución</h3>
+                                    <div className="table-cap">Mostrando {tables.length} mesas disponibles</div>
+                                </div>
+                                {isAdmin && (
+                                    <button className="add-table-btn" onClick={handleOpenAddTable}>
+                                        + Añadir Mesa
+                                    </button>
+                                )}
                             </div>
                             <div className="tables-grid-4cols">
                                 {currentTables.map(table => {
@@ -51,15 +160,18 @@ function Tables({ eventId }) {
                                         <div
                                             key={table.id}
                                             className={`table-widget ${selectedTableId === table.id ? 'active' : ''} ${isFull ? 'full' : ''}`}
-                                            onClick={() => { setSelectedTableId(table.id); setSelectedTableNumber(table.number) }}
+                                            onClick={() => { setSelectedTableId(table.id); setSelectedTableNumber(table.number); }}
                                         >
                                             <div className="table-circle">#{table.number}</div>
                                             <div className="table-cap">Mesa {table.number}</div>
                                             <div className="table-manager-name" title={table.managerName || 'Sin encargado asignado'}>
-                                                {table.managerName ? `👤 ${table.managerName}` : 'Sin encargado'}
+                                                {table.managerName ? `Encargado: ${table.managerName}` : 'Sin encargado'}
                                             </div>
                                             <div className="table-cap tables-capacity-text">
                                                 Cap: {guestsCount} / {table.numSeats} pers.
+                                            </div>
+                                            <div className="table-audit-badge" title={table.updatedByUsername ? `Modificado por: ${table.updatedByUsername}` : 'Creado por el sistema'}>
+                                                Modif: {table.updatedByUsername || 'Sistema'}
                                             </div>
                                         </div>
                                     );
@@ -98,9 +210,10 @@ function Tables({ eventId }) {
                                 <EditTable
                                     key={selectedTableId}
                                     tableId={selectedTableId}
+                                    tableData={selectedTable}
                                     eventId={eventId} 
                                     tableNumber={selectedTableNumber} 
-                                    currentCapacity={tables.find(t => t.id === selectedTableId)?.numSeats}
+                                    currentCapacity={selectedTable?.numSeats}
                                     onDeleteTable={async () => {
                                         const res = await deleteTable(selectedTableId);
                                         if (res.success) {
@@ -121,7 +234,44 @@ function Tables({ eventId }) {
                     </div>
                 </div>
             </section>
+
+            {isAddTableOpen && createPortal(
+                <div className="add-table-modal-overlay">
+                    <div className="add-table-modal">
+                        <h3 className="add-table-title">Añadir Nueva Mesa</h3>
+                        {addTableError && <p className="edit-table-error">{addTableError}</p>}
+                        <form onSubmit={handleAddTableSubmit} className="add-table-form">
+                            <label className="form-label">Número de mesa:</label>
+                            <input
+                                type="number"
+                                min="1"
+                                className="add-table-input"
+                                value={newTableNumber}
+                                onChange={(e) => setNewTableNumber(e.target.value)}
+                                required
+                            />
+                            <label className="form-label">Capacidad de asientos:</label>
+                            <input
+                                type="number"
+                                min="1"
+                                className="add-table-input"
+                                value={newTableSeats}
+                                onChange={(e) => setNewTableSeats(e.target.value)}
+                                required
+                            />
+                            <div className="add-table-actions">
+                                <button type="button" className="btn-cancel" onClick={() => setIsAddTableOpen(false)}>Cancelar</button>
+                                <button type="submit" className="add-table-btn" disabled={addTableLoading}>
+                                    {addTableLoading ? 'Guardando...' : 'Crear Mesa'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>,
+                document.body
+            )}
         </>
-    )
+    );
 }
+
 export default Tables;

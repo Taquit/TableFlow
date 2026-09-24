@@ -6,7 +6,7 @@ import EditGuestModal from './editGuest';
 import { useAuth } from '../hooks/useAuth';
 import '../css/editTable.css';
 
-export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDeleteTable, onUpdateCapacity, onGuestChange }) => {
+export const EditTable = ({ tableId, tableData, eventId, tableNumber, currentCapacity, onDeleteTable, onUpdateCapacity, onGuestChange }) => {
     const { guests, loading, error, createGuestForTable, updateGuestData, removeGuest } = useGuests(eventId, tableId);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingGuest, setEditingGuest] = useState(null);
@@ -17,8 +17,6 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
     const currentEvent = events?.find(e => e.id === parseInt(eventId));
     const ticketCost = currentEvent?.ticketCost || 0;
 
-    // El componente se remonta con key={tableId} en tables.jsx al cambiar de mesa,
-    // por lo que este estado local ya nace sincronizado con currentCapacity.
     const [isEditingCapacity, setIsEditingCapacity] = useState(false);
     const [tempCapacity, setTempCapacity] = useState(currentCapacity || 8);
 
@@ -55,17 +53,21 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
             <div className="edit-table-header">
                 <h3 className="edit-table-title">Mesa #{tableNumber}</h3>
                 
+                <div className="table-audit-header">
+                    Modificado por: <strong>{tableData?.updatedByUsername || 'Sistema'}</strong>
+                </div>
+
                 {isAdmin ? (
-                    <div className="capacity-editor" style={{ marginBottom: '10px' }}>
+                    <div className="capacity-editor">
                         {isEditingCapacity ? (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <label style={{ fontSize: '14px', color: '#cbd5e1' }}>Capacidad:</label>
+                            <div className="capacity-edit-row">
+                                <label className="capacity-label">Capacidad:</label>
                                 <input 
                                     type="number" 
                                     min="1" 
                                     value={tempCapacity} 
                                     onChange={(e) => setTempCapacity(e.target.value)} 
-                                    style={{ width: '60px', padding: '4px', borderRadius: '4px', border: '1px solid #475569', background: '#1e293b', color: '#fff' }}
+                                    className="capacity-input"
                                 />
                                 <button 
                                     onClick={async () => {
@@ -74,37 +76,37 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
                                         }
                                         setIsEditingCapacity(false);
                                     }}
-                                    style={{ background: '#10b981', color: 'white', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', lineHeight: '1' }}
+                                    className="capacity-save-btn"
                                     title="Guardar"
                                 >
-                                    ✓
+                                    Guardar
                                 </button>
                                 <button 
                                     onClick={() => {
                                         setTempCapacity(currentCapacity || 8);
                                         setIsEditingCapacity(false);
                                     }}
-                                    style={{ background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', lineHeight: '1' }}
+                                    className="capacity-cancel-btn"
                                     title="Cancelar"
                                 >
-                                    ✕
+                                    Cancelar
                                 </button>
                             </div>
                         ) : (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                                <p className="edit-table-desc" style={{ margin: 0 }}>Capacidad: {currentCapacity} personas</p>
+                            <div className="capacity-view-row">
+                                <p className="edit-table-desc capacity-view-text">Capacidad: {currentCapacity} personas</p>
                                 <button 
                                     onClick={() => setIsEditingCapacity(true)}
-                                    style={{ background: 'transparent', border: 'none', color: '#38bdf8', cursor: 'pointer', fontSize: '14px', padding: 0 }}
+                                    className="capacity-edit-trigger"
                                     title="Editar capacidad"
                                 >
-                                    ✏️
+                                    [Editar]
                                 </button>
                             </div>
                         )}
                     </div>
                 ) : (
-                    <p className="edit-table-desc" style={{ marginBottom: '8px' }}>Capacidad: {currentCapacity} personas</p>
+                    <p className="edit-table-desc">Capacidad: {currentCapacity} personas</p>
                 )}
 
                 <p className="edit-table-desc">Asigna o edita los invitados de esta mesa.</p>
@@ -119,15 +121,14 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
                 )}
                 {isAdmin && onDeleteTable && (
                     <button
-                        className="edit-table-add-btn"
-                        style={{ background: '#ef4444', marginTop: '10px' }}
+                        className="edit-table-add-btn edit-table-delete-btn"
                         onClick={async () => {
                             if (window.confirm('¿Estás seguro de que deseas eliminar esta mesa? Los invitados asignados a ella no serán borrados, pero se quedarán sin mesa.')) {
                                 await onDeleteTable();
                             }
                         }}
                     >
-                        🗑️ Eliminar Mesa
+                        Eliminar Mesa
                     </button>
                 )}
             </div>
@@ -136,22 +137,22 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
                 {loading && <p className="edit-table-desc">Cargando invitados...</p>}
                 {error && <p className="edit-table-error">Error: {error}</p>}
                 {!loading && !error && guests.length === 0 && (
-                    <div className="empty-guests">No hay invitados en este evento aún.</div>
+                    <div className="empty-guests">No hay invitados en esta mesa aún.</div>
                 )}
                 {!loading && !error && guests.length > 0 && guests.map(g => (
                     <div
                         className={`guest-item ${getPaymentClass(g)}`}
                         key={g.id}
                         onClick={() => isAdmin ? setEditingGuest(g) : null}
-                        style={{ cursor: isAdmin ? 'pointer' : 'default' }}
                         title={isAdmin ? "Haz clic para editar invitado" : ""}
                     >
                         <span className="guest-name">
                             {g.name}
                             {g.isTableManager && <span className="guest-manager-badge" title="Encargado de mesa">Encargado</span>}
                         </span>
-                        {/* Puedes descomentar u ocultar otros datos */}
-                        {/* <span>{g.phone}</span> */}
+                        <span className="guest-audit-info" title={g.updatedByUsername ? `Modificado por ${g.updatedByUsername}` : 'Creado por el sistema'}>
+                            Modif: {g.updatedByUsername || 'Sistema'}
+                        </span>
                     </div>
                 ))}
             </div>
@@ -175,5 +176,5 @@ export const EditTable = ({ tableId, eventId, tableNumber, currentCapacity, onDe
                 />
             )}
         </aside>
-    )
-}
+    );
+};

@@ -21,8 +21,11 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
             eventDate = body.time ? `${body.date}T${body.time}` : body.date;
         }
 
+        const location = body.location !== undefined ? body.location : null;
+        const eventNameParam = eventName !== undefined ? eventName : null;
+
         const query = 'UPDATE "Event" SET "eventName" = COALESCE($1, "eventName"), "ticketCost" = COALESCE($2, "ticketCost"), location = COALESCE($3, location), "numTable" = COALESCE($4, "numTable"), "numGuest" = COALESCE($5, "numGuest"), "updatedById" = COALESCE($6, "updatedById"), date = COALESCE($7, date), "updatedAt" = NOW() WHERE id = $8 RETURNING *;';
-        const result = await client.query(query, [eventName, ticketCost, body.location, numTable, numGuest, updatedById, eventDate, parseInt(id)]);
+        const result = await client.query(query, [eventNameParam, ticketCost, location, numTable, numGuest, updatedById, eventDate, parseInt(id)]);
         
         if (result.rows.length === 0) return { statusCode: 404, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "No encontrado" }) };
         return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows[0]) };

@@ -11,19 +11,39 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         
         const body = JSON.parse(event.body || "{}");
         const updatedById = body.updatedById !== undefined && body.updatedById !== null ? parseInt(body.updatedById, 10) : null;
+        const name = body.name !== undefined ? body.name : null;
+        const phone = body.phone !== undefined ? body.phone : null;
+        const boletNumber = body.boletNumber !== undefined && body.boletNumber !== null && body.boletNumber !== '' ? parseInt(body.boletNumber, 10) : null;
+        const paid = body.paid !== undefined ? Boolean(body.paid) : null;
+        const amountPaid = body.amountPaid !== undefined && body.amountPaid !== null && body.amountPaid !== '' ? parseFloat(body.amountPaid) : null;
+        const tableId = body.tableId !== undefined && body.tableId !== null && body.tableId !== '' ? parseInt(body.tableId, 10) : null;
+        const isTableManager = body.isTableManager !== undefined ? Boolean(body.isTableManager) : null;
+
         // Devuelve el invitado actualizado junto con su mesa, para que el front no pierda "guest.table"
         const query = `
             WITH updated AS (
-                UPDATE "Guest" SET name = COALESCE($1, name), phone = COALESCE($2, phone), "boletNumber" = $3, paid = COALESCE($4, paid), "amountPaid" = COALESCE($5, "amountPaid"), "tableId" = $6, "isTableManager" = COALESCE($7, "isTableManager"), "updatedById" = COALESCE($8, "updatedById") WHERE id = $9 RETURNING *
+                UPDATE "Guest"
+                SET name = COALESCE($1, name),
+                    phone = COALESCE($2, phone),
+                    "boletNumber" = $3,
+                    paid = COALESCE($4, paid),
+                    "amountPaid" = COALESCE($5, "amountPaid"),
+                    "tableId" = $6,
+                    "isTableManager" = COALESCE($7, "isTableManager"),
+                    "updatedById" = COALESCE($8, "updatedById")
+                WHERE id = $9
+                RETURNING *
             )
             SELECT u.*,
                    CASE WHEN t.id IS NULL THEN NULL
                         ELSE json_build_object('id', t.id, 'number', t.number, 'numSeats', t."numSeats")
-                   END AS "table"
+                   END AS "table",
+                   usr.username as "updatedByUsername"
             FROM updated u
-            LEFT JOIN "Table" t ON t.id = u."tableId";
+            LEFT JOIN "Table" t ON t.id = u."tableId"
+            LEFT JOIN "User" usr ON u."updatedById" = usr.id;
         `;
-        const result = await client.query(query, [body.name, body.phone, body.boletNumber, body.paid, body.amountPaid, body.tableId, body.isTableManager, updatedById, parseInt(id)]);
+        const result = await client.query(query, [name, phone, boletNumber, paid, amountPaid, tableId, isTableManager, updatedById, parseInt(id)]);
         
         if (result.rows.length === 0) return { statusCode: 404, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "No encontrado" }) };
         return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows[0]) };

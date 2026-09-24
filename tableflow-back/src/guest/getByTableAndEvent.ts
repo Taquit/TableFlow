@@ -10,7 +10,15 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         const eventId = event.pathParameters?.eventId;
         if (!tableId || !eventId) return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "tableId y eventId requeridos" }) };
         
-        const result = await client.query('SELECT * FROM "Guest" WHERE "tableId" = $1 AND "eventId" = $2;', [parseInt(tableId), parseInt(eventId)]);
+        const query = `
+            SELECT g.*,
+                   u.username as "updatedByUsername"
+            FROM "Guest" g
+            LEFT JOIN "User" u ON g."updatedById" = u.id
+            WHERE g."tableId" = $1 AND g."eventId" = $2
+            ORDER BY g.name ASC;
+        `;
+        const result = await client.query(query, [parseInt(tableId), parseInt(eventId)]);
         return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows) };
     } catch (error) {
         return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "Error interno" }) };

@@ -170,7 +170,7 @@ export function EditEvent() {
         return (
             <section className="create-event-section">
                 <div className="create-event-card">
-                    <h3 className="create-event-title" style={{textAlign: 'center'}}>⏳ Cargando eventos...</h3>
+                    <h3 className="create-event-title" style={{textAlign: 'center'}}>Cargando eventos...</h3>
                 </div>
             </section>
         );
@@ -180,7 +180,7 @@ export function EditEvent() {
         return (
             <section className="create-event-section">
                 <div className="create-event-card">
-                    <h3 className="create-event-title" style={{textAlign: 'center'}}>📭 No hay eventos para editar</h3>
+                    <h3 className="create-event-title" style={{textAlign: 'center'}}>No hay eventos para editar</h3>
                 </div>
             </section>
         );

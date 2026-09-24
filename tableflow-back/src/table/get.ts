@@ -6,7 +6,14 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
     const client = new Client({ connectionString: Resource.DATABASE_URL.value, ssl: { rejectUnauthorized: false } });
     try {
         await client.connect();
-        const result = await client.query('SELECT * FROM "Table" ORDER BY number ASC;');
+        const query = `
+            SELECT t.*,
+                   u.username as "updatedByUsername"
+            FROM "Table" t
+            LEFT JOIN "User" u ON t."updatedById" = u.id
+            ORDER BY t.number ASC;
+        `;
+        const result = await client.query(query);
         return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result.rows) };
     } catch (error) {
         return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: "Error interno" }) };

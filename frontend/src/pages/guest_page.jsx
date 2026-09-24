@@ -83,18 +83,20 @@ function GuestsPage() {
                         <div className="guest-list-grid">
                             {guests.map(guest => (
                                 <div
-                                    className="guest-card"
+                                    className={`guest-card ${isAdmin ? 'guest-card-admin' : ''}`}
                                     key={guest.id}
                                     onClick={() => isAdmin && setEditingGuest(guest)}
-                                    style={{ cursor: isAdmin ? 'pointer' : 'default' }}
                                     title={isAdmin ? "Haz clic para editar" : ""}
                                 >
                                     <h3>{guest.name}{guest.isTableManager && <span className="guest-manager-badge" title="Encargado de mesa">Encargado</span>}</h3>
-                                    {guest.phone && <p>📞 {guest.phone}</p>}
-                                    <p>🪑 Mesa: {guest.table ? `#${guest.table.number}` : 'Sin asignar'} | 🎫 Boleto: {guest.boletNumber ? `#${guest.boletNumber}` : 'N/A'}</p>
+                                    {guest.phone && <p>Tel: {guest.phone}</p>}
+                                    <p>Mesa: {guest.table ? `#${guest.table.number}` : 'Sin asignar'} | Boleto: {guest.boletNumber ? `#${guest.boletNumber}` : 'N/A'}</p>
 
                                     <div className={`guest-status-badge ${getPaymentStatus(guest).class}`}>
                                         {getPaymentStatus(guest).text}
+                                    </div>
+                                    <div className="guest-audit-badge">
+                                        Modificado por: {guest.updatedByUsername || 'Sistema'}
                                     </div>
                                 </div>
                             ))}

@@ -14,10 +14,12 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
             SELECT g.*,
                    CASE WHEN t.id IS NULL THEN NULL
                         ELSE json_build_object('id', t.id, 'number', t.number, 'numSeats', t."numSeats")
-                   END AS "table"
+                   END AS "table",
+                   u.username as "updatedByUsername"
             FROM "Guest" g
             LEFT JOIN "Table" t ON t.id = g."tableId"
-            WHERE g."eventId" = $1 AND g.name ILIKE $2
+            LEFT JOIN "User" u ON g."updatedById" = u.id
+            WHERE g."eventId" = $1 AND (g.name ILIKE $2 OR COALESCE(g.phone, '') ILIKE $2)
             ORDER BY g.name ASC;
         `;
         const result = await client.query(query, [parseInt(eventId), `%${decodeURIComponent(name)}%`]);

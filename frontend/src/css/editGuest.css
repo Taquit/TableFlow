@@ -48,6 +48,16 @@
     font-size: 1.5rem;
 }
 
+.edit-guest-audit-info {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    background: rgba(148, 163, 184, 0.1);
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
 .edit-guest-form-group {
     margin-bottom: 15px;
     display: flex;

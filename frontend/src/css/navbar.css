@@ -135,3 +135,7 @@
     transform: translateY(-8px) rotate(-45deg);
   }
 }
+
+.nav-auth-link {
+  font-weight: 700;
+}

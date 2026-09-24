@@ -9,6 +9,7 @@ import GuestsPage from './pages/guest_page';
 import MoneyPage from './pages/money_page';
 import ExcelPage from './pages/excel_page';
 import LoginPage from './pages/login_page';
+import AdminPage from './pages/admin_page';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/guests" element={<GuestsPage />} />
         <Route path="/accounting" element={<MoneyPage />} />
         <Route path="/export" element={<ExcelPage />} />
+        <Route path="/admins" element={<AdminPage />} />
       </Routes>
 
       <Footer />

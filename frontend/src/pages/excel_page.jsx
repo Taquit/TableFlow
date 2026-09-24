@@ -33,7 +33,8 @@ export function ExcelPage() {
             { header: 'Nombre del Invitado', key: 'name', width: 30 },
             { header: 'Mesa Asignada', key: 'table', width: 20 },
             { header: 'Monto Pagado', key: 'amountPaid', width: 20 },
-            { header: 'Estado', key: 'paid', width: 15 }
+            { header: 'Estado', key: 'paid', width: 15 },
+            { header: 'Modificado por', key: 'updatedByUsername', width: 20 }
         ];
 
         // Estilos de encabezado
@@ -55,7 +56,8 @@ export function ExcelPage() {
                 name: guest.name,
                 table: guest.table ? `Mesa ${guest.table.number}` : 'Sin mesa',
                 amountPaid: guest.amountPaid > 0 ? `$${guest.amountPaid}` : '$0',
-                paid: guest.paid ? 'Pagado' : 'Pendiente'
+                paid: guest.paid ? 'Pagado' : 'Pendiente',
+                updatedByUsername: guest.updatedByUsername || 'Sistema / Sin registrar'
             });
         });
 

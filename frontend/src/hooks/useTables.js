@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 const API_URL = import.meta.env.BACKEND_API || 'http://localhost:4000/api';
 import { apiCall } from '../utils/apiCall';
 
@@ -7,7 +7,7 @@ export function useTables(eventId) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchTables = async () => {
+    const fetchTables = useCallback(async () => {
         if (!eventId) return;
         setLoading(true);
         try {
@@ -26,11 +26,30 @@ export function useTables(eventId) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [eventId]);
 
     useEffect(() => {
         fetchTables();
-    }, [eventId]);
+    }, [fetchTables]);
+
+    const createNewTable = async (tableData) => {
+        try {
+            const response = await apiCall(`${API_URL}/tables`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(tableData)
+            });
+            const data = await response.json();
+            if (!data.error) {
+                setTables(prev => [...prev, data].sort((a, b) => a.number - b.number));
+                return { success: true, table: data };
+            } else {
+                return { success: false, error: data.error || data.message || 'Error al crear la mesa' };
+            }
+        } catch {
+            return { success: false, error: 'Error de red al crear la mesa' };
+        }
+    };
 
     const deleteTable = async (tableId) => {
         try {
@@ -57,7 +76,7 @@ export function useTables(eventId) {
             });
             const data = await response.json();
             if (!data.error) {
-                setTables(prev => prev.map(t => t.id === parseInt(tableId) ? { ...t, numSeats: parseInt(numSeats) } : t));
+                setTables(prev => prev.map(t => t.id === parseInt(tableId) ? { ...t, ...data, numSeats: parseInt(numSeats) } : t));
                 return { success: true, table: data };
             } else {
                 return { success: false, error: data.error };
@@ -67,5 +86,5 @@ export function useTables(eventId) {
         }
     };
 
-    return { tables, loading, error, deleteTable, updateTableCapacity, fetchTables };
+    return { tables, loading, error, createNewTable, deleteTable, updateTableCapacity, fetchTables };
 }

@@ -31,6 +31,11 @@ export default $config({
     api.route("POST /api/auth/login", "src/auth/login.handler");
     api.route("POST /api/auth/seed", "src/auth/seed.handler");
 
+    // Users
+    api.route("GET /api/users", "src/user/get.handler");
+    api.route("POST /api/users", "src/user/create.handler");
+    api.route("DELETE /api/users/{id}", "src/user/delete.handler");
+
     // Events
     api.route("GET /api/events", "src/event/get.handler");
     api.route("GET /api/events/{id}/accounting", "src/event/getAccounting.handler");

@@ -11,7 +11,7 @@ export function AccountingView({ eventId }) {
         return (
             <div className="accounting-container">
                 <div className="accounting-header">
-                    <h3 style={{ color: '#1f2937' }}>⏳ Cargando datos contables...</h3>
+                    <h3 style={{ color: '#1f2937' }}>Cargando datos contables...</h3>
                 </div>
             </div>
         );
@@ -21,7 +21,7 @@ export function AccountingView({ eventId }) {
         return (
             <div className="accounting-container">
                 <div className="accounting-header">
-                    <h3 style={{ color: '#ef4444' }}>❌ Error: {error}</h3>
+                    <h3 style={{ color: '#ef4444' }}>Error: {error}</h3>
                 </div>
             </div>
         );

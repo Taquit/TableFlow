@@ -38,10 +38,13 @@ function Navbar() {
                     <li><Link to="/guests" onClick={toggleMenu}>Gestión Invitados</Link></li>
                     <li><Link to="/accounting" onClick={toggleMenu}>Contaduría</Link></li>
                     <li><Link to="/export" onClick={toggleMenu}>Exportar</Link></li>
+                    {user && user.role === 'ADMIN' && (
+                        <li><Link to="/admins" onClick={toggleMenu}>Administradores</Link></li>
+                    )}
                     {user ? (
-                        <li><a href="#" onClick={handleLogout} style={{ fontWeight: 'bold' }}>Salir</a></li>
+                        <li><a href="#" onClick={handleLogout} className="nav-auth-link">Salir</a></li>
                     ) : (
-                        <li><Link to="/login" onClick={toggleMenu} style={{ fontWeight: 'bold' }}>Login</Link></li>
+                        <li><Link to="/login" onClick={toggleMenu} className="nav-auth-link">Login</Link></li>
                     )}
                 </ul>
             </div>

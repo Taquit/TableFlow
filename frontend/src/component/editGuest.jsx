@@ -88,6 +88,10 @@ const EditGuestModal = ({ guest, onClose, onUpdate, onDelete }) => {
                 
                 <h3>Editar Invitado</h3>
                 
+                <div className="edit-guest-audit-info">
+                    Última modificación registrada por: <strong>{guest.updatedByUsername || 'Sistema / Sin registrar'}</strong>
+                </div>
+
                 {error && <p className="edit-guest-error-msg">{error}</p>}
 
                 <div className="edit-guest-form-group">

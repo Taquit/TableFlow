@@ -1,8 +1,13 @@
 {
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.163",
     "@types/bcryptjs": "^2.4.6",
-    "@types/pg": "^8.23.1"
+    "@types/pg": "^8.23.1",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.115.0",
