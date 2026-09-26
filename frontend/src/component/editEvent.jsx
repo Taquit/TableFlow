@@ -19,6 +19,8 @@ function EditEventForm({ eventObj, status, onSubmit, onDelete }) {
 
     return (
         <form onSubmit={handleSubmit} className="create-event-form edit-event-form-inner">
+            <div className="edit-event-audit-info">Ultima modificacion registrada por: <strong>{eventObj.updatedByUsername || 'Sistema / Sin registrar'}</strong></div>
+
             <div className="create-event-group">
                 <label className="form-label">Nombre del evento *</label>
                 <input

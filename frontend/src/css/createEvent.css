@@ -150,3 +150,18 @@
 .edit-event-form-active {
     margin-bottom: 30px;
 }
+
+.edit-event-audit-info {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    background: rgba(148, 163, 184, 0.12);
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    text-align: center;
+}
+
+.edit-event-audit-info strong {
+    color: #f1f5f9;
+}

@@ -13,7 +13,17 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         const numGuest = body.numGuest ? parseInt(body.numGuest, 10) : 0;
         const updatedById = body.updatedById ? parseInt(body.updatedById, 10) : null;
 
-        const query = 'INSERT INTO "Event" ("eventName", date, "ticketCost", location, "numTable", "numGuest", "updatedById", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, NOW()) RETURNING *;';
+        const query = `
+            WITH inserted AS (
+                INSERT INTO "Event" ("eventName", date, "ticketCost", location, "numTable", "numGuest", "updatedById", "updatedAt")
+                VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+                RETURNING *
+            )
+            SELECT i.*,
+                   u.username as "updatedByUsername"
+            FROM inserted i
+            LEFT JOIN "User" u ON i."updatedById" = u.id;
+        `;
         const result = await client.query(query, [eventName, date, body.ticketCost || 0, body.location, numTable, numGuest, updatedById]);
 
         const newEvent = result.rows[0];

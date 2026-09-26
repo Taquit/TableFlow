@@ -78,6 +78,7 @@
 
 .nav-links {
   display: flex;
+  align-items: center;
   gap: 32px;
   list-style: none;
   margin: 0;
@@ -144,4 +145,22 @@
 
 .nav-auth-link {
   font-weight: 700;
+}
+
+.nav-user-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-user-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #7e22ce;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
 }

@@ -42,7 +42,10 @@ function Navbar() {
                         <li><Link to="/admins" onClick={toggleMenu}>Administradores</Link></li>
                     )}
                     {user ? (
-                        <li><a href="#" onClick={handleLogout} className="nav-auth-link">Salir</a></li>
+                        <>
+                            <li className="nav-user-item"><span className="nav-user-badge">Usuario: {user.username}</span></li>
+                            <li><a href="#" onClick={handleLogout} className="nav-auth-link">Salir</a></li>
+                        </>
                     ) : (
                         <li><Link to="/login" onClick={toggleMenu} className="nav-auth-link">Login</Link></li>
                     )}
