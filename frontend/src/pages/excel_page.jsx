@@ -55,7 +55,7 @@ export function ExcelPage() {
                 boletNumber: guest.boletNumber ? guest.boletNumber : 'N/A',
                 name: guest.name,
                 table: guest.table ? guest.table.number : 'N/A',
-                amountPaid: guest.amountPaid > 0 ? `$${guest.amountPaid}` : '$0',
+                amountPaid: Number(guest.amountPaid) || 0,
                 paid: guest.paid ? 'Pagado' : 'Pendiente',
                 updatedByUsername: guest.updatedByUsername || 'Sistema / Sin registrar'
             });
@@ -82,9 +82,9 @@ export function ExcelPage() {
                             {eventsLoading ? (
                                 <p className="loading-text">Cargando eventos...</p>
                             ) : (
-                                <select 
-                                    className="custom-input" 
-                                    value={selectedEventId} 
+                                <select
+                                    className="custom-input"
+                                    value={selectedEventId}
                                     onChange={(e) => setSelectedEventId(e.target.value)}
                                 >
                                     <option value="">-- Elige un evento --</option>
