@@ -63,6 +63,36 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: auto;
+    scrollbar-color: #94a3b8 #f1f5f9;
+}
+
+/* Barra de scroll ancha y accesible para laptops (cursor / trackpad) */
+.guests-list-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.guests-list-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.guests-list-container::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 8px;
+    border: 2px solid #f1f5f9;
+}
+
+.guests-list-container::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+.guests-list-container::-webkit-scrollbar-thumb:active {
+    background: #334155;
 }
 
 @media (max-width: 480px) {
