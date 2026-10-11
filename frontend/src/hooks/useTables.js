@@ -7,9 +7,9 @@ export function useTables(eventId) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchTables = useCallback(async () => {
+    const fetchTables = useCallback(async (isSilent = false) => {
         if (!eventId) return;
-        setLoading(true);
+        if (!isSilent) setLoading(true);
         try {
             const response = await apiCall(`${API_URL}/tables/event/${eventId}`);
             if (!response.ok) {
@@ -24,7 +24,7 @@ export function useTables(eventId) {
         } catch (error) {
             setError(error.message);
         } finally {
-            setLoading(false);
+            if (!isSilent) setLoading(false);
         }
     }, [eventId]);
 

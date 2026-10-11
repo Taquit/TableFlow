@@ -134,12 +134,12 @@ export const EditTable = ({ tableId, tableData, eventId, tableNumber, currentCap
             </div>
 
             <div className="guests-list-container">
-                {loading && <p className="edit-table-desc">Cargando invitados...</p>}
+                {loading && guests.length === 0 && <p className="edit-table-desc">Cargando invitados...</p>}
                 {error && <p className="edit-table-error">Error: {error}</p>}
                 {!loading && !error && guests.length === 0 && (
                     <div className="empty-guests">No hay invitados en esta mesa aún.</div>
                 )}
-                {!loading && !error && guests.length > 0 && guests.map(g => (
+                {!error && guests.length > 0 && guests.map(g => (
                     <div
                         className={`guest-item ${getPaymentClass(g)}`}
                         key={g.id}

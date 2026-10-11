@@ -93,6 +93,11 @@
     min-width: 0;
     box-sizing: border-box;
     animation: fadeIn 0.3s ease;
+    position: sticky;
+    top: 90px;
+    align-self: flex-start;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
 }
 
 .pagination-container {
@@ -145,6 +150,9 @@
         width: 100%;
         max-width: 100%;
         margin-top: 20px;
+        position: static;
+        max-height: none;
+        overflow-y: visible;
     }
     
     .tables-grid-4cols,

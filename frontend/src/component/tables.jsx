@@ -19,10 +19,10 @@ function Tables({ eventId }) {
     const { user } = useAuth();
     const isAdmin = user && user.role === 'ADMIN';
 
-    if (loading) {
+    if (loading && tables.length === 0) {
         return <p>Cargando mesas...</p>;
     }
-    if (error) {
+    if (error && tables.length === 0) {
         return <p>Error al cargar mesas: {error}</p>;
     }
     if (tables.length === 0) {
@@ -226,7 +226,7 @@ function Tables({ eventId }) {
                                         return await updateTableCapacity(selectedTableId, newCapacity, updatedById);
                                     }}
                                     onGuestChange={() => {
-                                        fetchTables();
+                                        fetchTables(true);
                                     }}
                                 />
                             </div>
