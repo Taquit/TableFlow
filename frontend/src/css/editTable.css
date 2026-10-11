@@ -22,14 +22,15 @@
 
 .edit-table-title {
     font-size: 1.3rem;
-    font-weight: 700;
+    font-weight: 800;
     margin: 0 0 4px 0;
-    color: var(--text-primary, #1e293b);
+    color: #000000;
 }
 
 .edit-table-desc {
     font-size: 0.85rem;
-    color: var(--text-secondary, #64748b);
+    color: #0f172a;
+    font-weight: 500;
     margin: 0 0 6px 0;
     line-height: 1.4;
 }
@@ -59,95 +60,114 @@
 }
 
 .guests-list-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+@media (max-width: 480px) {
+    .guests-list-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 .guest-item {
-    background: #f8fafc;
-    border: 1px solid var(--dark-border, rgba(0, 0, 0, 0.08));
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 10px 12px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
     transition: all 0.2s ease;
     cursor: pointer;
-    color: var(--text-primary, #1e293b);
+    color: #000000;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .guest-item:hover {
-    background: #f1f5f9;
-    border-color: rgba(168, 85, 247, 0.3);
+    background: #f8fafc;
+    border-color: #7e22ce;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .guest-name {
-    font-weight: 500;
-    font-size: 0.95rem;
-    color: var(--text-primary, #1e293b);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #000000;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 5px;
+    width: 100%;
+    word-break: break-word;
 }
 
 .guest-manager-badge {
     display: inline-block;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #0284c7;
-    background: rgba(2, 132, 199, 0.1);
-    border: 1px solid rgba(2, 132, 199, 0.25);
+    color: #0369a1;
+    background: #e0f2fe;
+    border: 1px solid #7dd3fc;
 }
 
 .empty-guests {
+    grid-column: 1 / -1;
     text-align: center;
     padding: 24px;
-    color: var(--text-secondary, #64748b);
+    color: #0f172a;
+    font-weight: 600;
     font-size: 0.9rem;
     background: #f8fafc;
     border-radius: 8px;
-    border: 1px dashed var(--dark-border, rgba(0, 0, 0, 0.15));
+    border: 1px dashed #94a3b8;
 }
 
 .guest-item.guest-paid-full {
-    border-left: 4px solid #10b981;
-    background: rgba(16, 185, 129, 0.08);
+    border-left: 5px solid #059669;
+    background: #f0fdf4;
 }
 
 .guest-item.guest-paid-partial {
-    border-left: 4px solid #f59e0b;
-    background: rgba(245, 158, 11, 0.08);
+    border-left: 5px solid #d97706;
+    background: #fffbeb;
 }
 
 .guest-item.guest-unpaid {
-    border-left: 4px solid #ef4444;
-    background: rgba(239, 68, 68, 0.08);
+    border-left: 5px solid #dc2626;
+    background: #fef2f2;
 }
 
 .table-audit-header {
     font-size: 0.8rem;
-    color: var(--text-secondary, #64748b);
-    background: rgba(100, 116, 139, 0.08);
+    color: #0f172a;
+    font-weight: 600;
+    background: #e2e8f0;
     padding: 4px 8px;
     border-radius: 6px;
     display: inline-block;
     margin-bottom: 8px;
-    border: 1px solid var(--dark-border, rgba(0, 0, 0, 0.08));
+    border: 1px solid #cbd5e1;
 }
 
 .guest-audit-info {
-    font-size: 0.75rem;
-    color: var(--text-secondary, #64748b);
-    margin-left: auto;
-    padding-left: 10px;
+    font-size: 0.72rem;
+    color: #334155;
+    font-weight: 600;
+    margin-left: 0;
+    padding-left: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .capacity-editor {
@@ -162,7 +182,8 @@
 
 .capacity-label {
     font-size: 14px;
-    color: var(--text-secondary, #64748b);
+    font-weight: 700;
+    color: #0f172a;
 }
 
 .capacity-input {
@@ -205,7 +226,8 @@
 
 .capacity-view-text {
     margin: 0;
-    color: var(--text-secondary, #64748b);
+    color: #0f172a;
+    font-weight: 700;
 }
 
 .capacity-edit-trigger {
