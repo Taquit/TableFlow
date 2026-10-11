@@ -22,7 +22,7 @@ body {
   background-color: var(--dark-bg);
   color: var(--text-primary);
   font-family: var(--sans-font);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Common Layout Containers */

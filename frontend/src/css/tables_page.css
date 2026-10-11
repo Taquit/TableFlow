@@ -39,7 +39,7 @@
 /* Styles for tables.jsx */
 .tables-layout-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 24px;
     align-items: flex-start;
     justify-content: center;
@@ -94,10 +94,9 @@
     box-sizing: border-box;
     animation: fadeIn 0.3s ease;
     position: sticky;
-    top: 90px;
+    top: 80px;
     align-self: flex-start;
-    max-height: calc(100vh - 110px);
-    overflow-y: auto;
+    z-index: 20;
 }
 
 .pagination-container {
@@ -151,8 +150,6 @@
         max-width: 100%;
         margin-top: 20px;
         position: static;
-        max-height: none;
-        overflow-y: visible;
     }
     
     .tables-grid-4cols,

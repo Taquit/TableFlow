@@ -62,28 +62,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-height: 400px;
-    overflow-y: auto;
-    padding-right: 8px;
-}
-
-/* Custom scrollbar for the guests list */
-.guests-list-container::-webkit-scrollbar {
-    width: 6px;
-}
-
-.guests-list-container::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.04);
-    border-radius: 4px;
-}
-
-.guests-list-container::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
-}
-
-.guests-list-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.25);
 }
 
 .guest-item {
